@@ -1,7 +1,6 @@
 [![Angular Logo](https://www.vectorlogo.zone/logos/angular/angular-icon.svg)](https://angular.io/) [![Electron Logo](https://www.vectorlogo.zone/logos/electronjs/electronjs-icon.svg)](https://electronjs.org/)
 
 [![Travis Build Status][build-badge]][build]
-[![Dependencies Status][dependencyci-badge]][dependencyci]
 [![Make a pull request][prs-badge]][prs]
 [![License](http://img.shields.io/badge/Licence-MIT-brightgreen.svg)](LICENSE.md)
 
@@ -19,7 +18,7 @@ Currently runs with:
 - Electron v6.0.2
 - Electron Builder v21.2.0
 - Abp v4.3.0
-With this sample, you can :
+- With this sample, you can :
 
 - Run your app in a local development environment with Electron & Hot reload
 - Run your app in a production environment

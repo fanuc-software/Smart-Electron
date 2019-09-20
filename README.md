@@ -18,7 +18,7 @@ Currently runs with:
 - Angular v8.1.3
 - Electron v6.0.2
 - Electron Builder v21.2.0
-
+- Abp v4.3.0
 With this sample, you can :
 
 - Run your app in a local development environment with Electron & Hot reload
@@ -32,7 +32,7 @@ With this sample, you can :
 Clone this repository locally :
 
 ``` bash
-git clone https://github.com/maximegris/angular-electron.git
+git clone https://github.com/fanuc-software/Smart-Electron.git
 ```
 
 Install dependencies with npm :

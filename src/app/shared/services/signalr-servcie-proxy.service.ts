@@ -5,9 +5,10 @@ import { AppConsts } from '../AppConsts';
 @Injectable()
 export class SignalrServcieProxyService {
   chatHub = null;
-
+  cncHub = null;
   constructor(private router: Router) {
-    this.initSignalr();
+    // this.initSignalr();
+    this.initCncSignalr();
   }
   initSignalr() {
 
@@ -27,4 +28,31 @@ export class SignalrServcieProxyService {
       abp.log.debug('Connected to routeHub server!');
     });
   }
+  initCncSignalr() {
+    abp.signalr.startConnection(AppConsts.remoteServiceBaseUrl + '/hubs-cncHub', (connection) => {
+      this.cncHub = connection; // Save a reference to the hub
+      connection.on('GetCNCData', (message: string) => { // Register for incoming messages
+        console.log("[GetCNCData ]: ", message);
+
+      });
+      connection.on('GetError', (message: string) => { // Register for incoming messages
+        console.log("[GetError ]: ", message);
+
+      });
+    }).then((connection) => {
+      abp.log.debug('Connected to cncHub server!');
+      abp.event.trigger('connectSuccesss', true);
+    });
+    abp.event.on('cncRefreshEvent', (s) => {
+      console.log(JSON.stringify(s));
+      this.cncHub.invoke('refresh', JSON.stringify(s));
+    //  this.cncHub.invoke('sendMessage', JSON.stringify(s));
+
+      
+    });
+  }
+
+
+
+
 }

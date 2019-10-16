@@ -12,19 +12,19 @@
 declare var System: any;
 declare var App: any; // Related to Metronic
 declare var Layout: any; // Related to Metronic
-
+declare var zrender: any;
 declare var Push: any;
 
 interface JQuery {
-    countTo(...any): any;
+  countTo(...any): any;
 }
 
 interface JQuery {
-    sparkline(...any): any;
+  sparkline(...any): any;
 }
 
 interface JQueryStatic {
-    AdminBSB: any;
+  AdminBSB: any;
 }
 
 /* SystemJS module definition */
@@ -32,7 +32,7 @@ declare var nodeModule: NodeModule;
 interface NodeModule {
   id: string;
 }
-declare var window: Window;
+//declare var window: Window;
 interface Window {
   process: any;
   require: any;

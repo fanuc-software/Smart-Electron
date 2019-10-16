@@ -8,7 +8,7 @@ export class SignalrServcieProxyService {
   cncHub = null;
   constructor(private router: Router) {
     // this.initSignalr();
-    this.initCncSignalr();
+   // this.initCncSignalr();
   }
   initSignalr() {
 

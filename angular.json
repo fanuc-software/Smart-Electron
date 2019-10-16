@@ -41,7 +41,8 @@
               "node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.sweet-alert.js",
               "node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.moment.js",
               "node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.signalr.js",
-              "node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.signalr-client.js"
+              "node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.signalr-client.js",
+              "node_modules/zrender/dist/zrender.js"
             ]
           },
           "configurations": {

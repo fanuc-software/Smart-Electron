@@ -13,9 +13,29 @@
     margin: 0;
     padding: 50px 20px;
   }
-  #main{
-    width: 812px;
-    height: 500px;
+  #main {
+    position: absolute;
+    width: 1366px;
+    height: 768px;
+    z-index: 22;
+  }
+  p {
+    font-family: "DINCondensed-Bold";
+    font-size: 44px;
+    color: #dfa03d;
+    letter-spacing: 0;
+  }
+  .main {
+    width: 1366px;
+    height: 768px;
     margin: 0 auto;
+  }
+  #home-state{
+    position: absolute;
+    width: 240px;
+    height: 20px;
+    z-index: 44;
+    left: 563px;
+    top: 561px;
   }
 }

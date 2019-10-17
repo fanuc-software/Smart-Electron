@@ -1,10 +1,12 @@
-export class HomeSpeed {
+import { IZrenderNode } from "./zrender-Factory";
+
+export class HomeSpeed implements IZrenderNode {
     private MinCircle: CircleNode;
     private MaxCircle: CircleNode;
     public MainElementNodes: any[] = [];
     constructor() {
-        this.MinCircle = new CircleNode(100, 200, 200);
-        this.MaxCircle = new CircleNode(150, 200, 200);
+        this.MinCircle = new CircleNode(100, 683, 330);
+        this.MaxCircle = new CircleNode(120, 683, 330);
         this.Build();
     }
 
@@ -28,7 +30,7 @@ export class HomeSpeed {
             style: {
                 //fill: '#F00',
                 stroke: 'white',
-            
+
                 lineWidth: 1,
                 // stroke: '#F00',
                 // percent: 0
@@ -37,8 +39,8 @@ export class HomeSpeed {
     }
 }
 
-export class CircleNode {
-    private MaxCount = 100;
+class CircleNode {
+    private MaxCount = 200;
 
     public positionNode: PositionEqual[] = [];
     constructor(private R: number, private X: number, private Y: number) {
@@ -52,7 +54,7 @@ export class CircleNode {
     }
 }
 
-export class PositionEqual {
+class PositionEqual {
     constructor(public PositionX: number, public PositionY: number) {
 
     }

@@ -1,9 +1,10 @@
-import { IZrenderNode } from "./zrender-Factory";
+import { IZrenderNode, BaseAssetsNode } from "./zrender-Factory";
 
 export class HomeAlarm implements IZrenderNode {
     public MainElementNodes: any[] = [];
     private nodes: AlarmZrenderNode[] = [];
     constructor() {
+
         let upProgress = 100;
 
         const upNode = new AlarmZrenderNode({ x: 280, y: 163 }, { x: 9.4, y: 64.4 }, { x: 4.4, y: 78.6 }, { x: 50, y: 20 }, { x: 59, y: 38 }, { width: 75, height: 99 }, { width: 52, height: 70 }, 'up', upProgress);
@@ -46,7 +47,7 @@ export class HomeAlarm implements IZrenderNode {
     }
 }
 
-class AlarmZrenderNode {
+class AlarmZrenderNode extends BaseAssetsNode {
     public mainZrender: any;
     private progressZrender: any;
     private greenStateZrender: any;
@@ -55,12 +56,13 @@ class AlarmZrenderNode {
         redStatePosition: { x: number, y: number }, progressBgPosition: { x: number, y: number },
         progressPosition: { x: number, y: number }, bgSize: { width: number, height: number },
         progressSize: { width: number, height: number }, public key: string, currentProgress: number) {
+        super();
         this.mainZrender = new zrender.Group();
         this.mainZrender.position[0] = groupPositon.x;
         this.mainZrender.position[1] = groupPositon.y;
         this.greenStateZrender = new zrender.Image({
             style: {
-                image: '../../../../assets/images/state-green.png',
+                image: `${this.basePath}/images/state-green.png`,
                 width: 36,
                 height: 36,
                 x: greenStatePosition.x,
@@ -69,7 +71,7 @@ class AlarmZrenderNode {
         });
         this.redStateZrender = new zrender.Image({
             style: {
-                image: '../../../../assets/images/state-red.png',
+                image: `${this.basePath}/images/state-red.png`,
                 width: 36,
                 height: 36,
                 x: redStatePosition.x,
@@ -78,7 +80,7 @@ class AlarmZrenderNode {
         });
         const progressBg = new zrender.Image({
             style: {
-                image: `../../../../assets/images/alarm-${this.key}.png`,
+                image: `${this.basePath}/images/alarm-${this.key}.png`,
                 width: bgSize.width,
                 height: bgSize.height,
                 x: progressBgPosition.x,
@@ -88,7 +90,7 @@ class AlarmZrenderNode {
 
         this.progressZrender = new zrender.Image({
             style: {
-                image: `../../../../assets/images/${this.key}-${currentProgress}.png`,
+                image: `${this.basePath}/images/${this.key}-${currentProgress}.png`,
                 width: progressSize.width,
                 height: progressSize.height,
                 x: progressPosition.x,
@@ -103,21 +105,21 @@ class AlarmZrenderNode {
 
     public updateProgress(newProgress: number) {
         this.progressZrender.attr('style', {
-            image: `../../../../assets/images/${this.key}-${newProgress}.png`
+            image: `${this.basePath}/images/${this.key}-${newProgress}.png`
 
         });
     }
     public updateGreenState(isActive: boolean) {
         const state = isActive ? '-active' : '';
         this.greenStateZrender.attr('style', {
-            image: `../../../../assets/images/state-green${state}.png`
+            image: `${this.basePath}/images/state-green${state}.png`
 
         });
     }
     public updateRedState(isActive: boolean) {
         const state = isActive ? '-active' : '';
         this.redStateZrender.attr('style', {
-            image: `../../../../assets/images/state-red${state}.png`
+            image: `${this.basePath}/images/state-red${state}.png`
 
         });
     }

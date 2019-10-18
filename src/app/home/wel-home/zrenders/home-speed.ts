@@ -1,20 +1,143 @@
-import { IZrenderNode } from "./zrender-Factory";
+import { IZrenderNode, BaseAssetsNode } from "./zrender-Factory";
 
-export class HomeSpeed implements IZrenderNode {
+export class HomeSpeed extends BaseAssetsNode implements IZrenderNode {
     private maxCircleNode: CircleZrenderNode = new CircleZrenderNode();
     public MainElementNodes: any[] = [];
+    private speedTopZrender: any;
+    private speedProgressZrender: any;
     constructor() {
+        super();
         const speedBackground = new zrender.Image({
             style: {
-                image: '../../../../assets/images/speed-background.png',
+                image: `${this.basePath}/images/speed-background.png`,
                 width: 360,
-                height: 328,
-                x: 500,
-                y: 155
+                height: 330,
+                x: 498,
+                y: 154
+            }
+        });
+
+        const speedBottom = new zrender.Circle({
+            shape: {
+                cx: 679,
+                cy: 335,
+                r: 148
+            }, style: {
+                fill: 'rgba(41,41,41)'
+            }
+        });
+        const speedCrcle = new zrender.Circle({
+            shape: {
+                cx: 679,
+                cy: 335,
+                r: 115
+            },
+            style: {
+                fill: '#3E3E3E'
+            }
+        });
+        this.speedTopZrender = new zrender.Image({
+            style: {
+                image: `${this.basePath}/images/speed-top.png`,
+                width: 211,
+                height: 211,
+                x: 573.5,
+                y: 230,
+                text: '1500',
+                fontSize: 70,
+                fontFamily: 'DINCondensed-Bold',
+                textFill: '#474646',
+                textOffset: [0, 0]
+            }
+        });
+        const sector = new zrender.Sector({
+            shape: {
+                cx: 679,
+                cy: 335,
+                r: 148,
+
+                startAngle: Math.PI / 3.28,
+                endAngle: Math.PI * 0.698
+            },
+            style: {
+                fill: '#808080',
+            }
+        });
+        this.speedProgressZrender = new zrender.Sector({
+            shape: {
+                cx: 679,
+                cy: 335,
+                r: 148,
+                r0: 110,
+                startAngle: this.getAngle(0).startAngle,
+                endAngle: this.getAngle(80).endAngle
+            },
+            style: {
+                fill: 'green',
             }
         });
         this.MainElementNodes.push(speedBackground);
-        this.maxCircleNode.mainZrenderNodes.forEach(d => this.MainElementNodes.push(d));
+        this.MainElementNodes.push(speedBottom);
+        this.MainElementNodes.push(sector);
+        this.MainElementNodes.push(this.speedProgressZrender);
+
+        this.MainElementNodes.push(speedCrcle);
+        this.MainElementNodes.push(this.speedTopZrender);
+        this.maxCircleNode.mainZrenderNodes.forEach(d => this.MainElementNodes.push(d.mainZrender));
+        this.doWork();
+    }
+
+    private doWork() {
+        setInterval(() => {
+            const temp = Math.round(Math.random() * 100);
+            this.maxCircleNode.updateProgerss(temp);
+        }, 2000);
+
+        setInterval(() => {
+            const temp = Math.round(Math.random() * 100);
+            this.updateMainProgress(temp);
+        }, 500);
+        setInterval(() => {
+            const temp = Math.round(Math.random() * 2000);
+            this.updateSpeedTop(temp);
+        }, 100);
+    }
+    private getAngle(progress: number) {
+        const start = 2.1928;
+        const end = 0.9578;
+        if (progress == 0) {
+            return { startAngle: start, endAngle: start }
+        }
+        if (progress == 100) {
+            return { startAngle: start, endAngle: end }
+
+        }
+        const total = (Math.PI * 2 - start + end) / 100;
+        const endAngle = (start + total * progress) % (2 * Math.PI);
+        return { startAngle: start, endAngle: endAngle }
+    }
+    public updateSpeedTop(value: number) {
+        const update = (Array(4).join('0') + value).slice(-4);
+        this.speedTopZrender.attr('style', {
+            text: update
+        });
+    }
+
+    public updateMainProgress(progress: number) {
+        let color = 'white';
+        if (progress <= 30) {
+            color = 'green';
+        } else if (progress <= 70) {
+            color = 'yellow'
+        } else if (progress > 70) {
+            color = 'red';
+        }
+        this.speedProgressZrender.attr('shape', {
+            endAngle: this.getAngle(progress).endAngle
+        });
+        this.speedProgressZrender.attr('style', {
+            fill: color,
+        });
     }
 
 }
@@ -24,26 +147,51 @@ export class HomeSpeed implements IZrenderNode {
 
 
 class CircleZrenderNode {
-    public mainZrenderNodes: any[] = [];
+    public mainZrenderNodes: CircleLineNode[] = [];
     private MinCircle: CircleNode;
     private MaxCircle: CircleNode;
     constructor() {
-        this.MinCircle = new CircleNode(194, 683, 335);
-        this.MaxCircle = new CircleNode(210, 683, 335);
+        this.MinCircle = new CircleNode(198, 679, 335);
+        this.MaxCircle = new CircleNode(210, 679, 335);
         this.Build();
+
     }
 
     private Build() {
         const maxLen = this.MinCircle.positionNode.length;
         for (let index = 0; index < maxLen; index++) {
 
-            const node = this.BuildNode(this.MinCircle.positionNode[index], this.MaxCircle.positionNode[index]);
+            const node = new CircleLineNode(this.MinCircle.positionNode[index], this.MaxCircle.positionNode[index], this.MinCircle.positionNode[index].progress);
             this.mainZrenderNodes.push(node);
 
         }
     }
-    private BuildNode(startPosition: PositionEqual, endPosition: PositionEqual): any {
-        return new zrender.Line({
+    public updateProgerss(progress: number) {
+        let color = 'white';
+        if (progress <= 30) {
+            color = 'green';
+        } else if (progress <= 70) {
+            color = 'yellow'
+        } else if (progress > 70) {
+            color = 'red';
+        }
+        this.mainZrenderNodes.forEach(d => {
+            d.mainZrender.attr('style', {
+                stroke: 'white'
+            })
+        });
+        const list = this.mainZrenderNodes.filter(d => d.progressId <= progress);
+        list.forEach(d => {
+            d.mainZrender.attr('style', {
+                stroke: color
+            })
+        });
+    }
+}
+class CircleLineNode {
+    public mainZrender: any;
+    constructor(startPosition: PositionEqual, endPosition: PositionEqual, public progressId: number) {
+        this.mainZrender = new zrender.Line({
             shape: {
                 x1: startPosition.PositionX,
                 y1: startPosition.PositionY,
@@ -59,22 +207,40 @@ class CircleZrenderNode {
     }
 }
 
-
 class CircleNode {
-    private MaxCount = 200;
+    private MaxCount = 201;
 
     public positionNode: PositionEqual[] = [];
     constructor(private R: number, private X: number, private Y: number) {
-        for (let index = 0; index < this.MaxCount; index++) {
-            const pX = this.R * Math.cos(index * 2 * Math.PI / this.MaxCount) + this.X;
-            const pY = this.R * Math.sin(index * 2 * Math.PI / this.MaxCount) + this.Y;
-            this.positionNode.push(new PositionEqual(pX, pY));
+        let start = 2.1928;
+        let end = 0.9578;
+        let index = 0;
+        const len = (Math.PI * 2 - start + end) / this.MaxCount;
+        while (start <= 2 * Math.PI) {
+            const pX = this.R * Math.cos(start) + this.X;
+            const pY = this.R * Math.sin(start) + this.Y;
+            this.positionNode.push(new PositionEqual(pX, pY, index));
+            index++;
+            start += len;
         }
+        start = 0;
+        while (start <= end) {
+            const pX = this.R * Math.cos(start) + this.X;
+            const pY = this.R * Math.sin(start) + this.Y;
+            this.positionNode.push(new PositionEqual(pX, pY, index));
+            start += len;
+            index++;
+        }
+        console.log(index);
     }
 }
 
 class PositionEqual {
-    constructor(public PositionX: number, public PositionY: number) {
-
+    public progress: number;
+    constructor(public PositionX: number, public PositionY: number, index: number) {
+        this.progress = Math.round(index / 2);
+        if (this.progress >= 100) {
+            this.progress = 100;
+        }
     }
 }

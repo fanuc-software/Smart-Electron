@@ -1,6 +1,8 @@
 import { app, BrowserWindow, screen } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
+var electron_1 = require("electron");
+
 let win, serve;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
@@ -9,15 +11,15 @@ function createWindow() {
 
   const electronScreen = screen;
   const size = electronScreen.getPrimaryDisplay().workAreaSize;
-
+  electron_1.Menu.setApplicationMenu(null);
   // Create the browser window.
   win = new BrowserWindow({
     x: 0,
     y: 0,
     // width: size.width,
     // height: size.height,
-    width: 800,
-    height: 600,
+    width: 1400,
+    height: 840,
     webPreferences: {
       nodeIntegration: true,
       webviewTag: true

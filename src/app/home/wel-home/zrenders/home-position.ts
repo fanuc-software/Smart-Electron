@@ -1,4 +1,4 @@
-import { IZrenderNode } from "./zrender-Factory";
+import { IZrenderNode, BaseAssetsNode } from "./zrender-Factory";
 
 export class HomePosition implements IZrenderNode {
     public MainElementNodes: any[] = [];
@@ -14,17 +14,38 @@ export class HomePosition implements IZrenderNode {
         this.MainElementNodes.push(this.yNode.zrender);
         this.MainElementNodes.push(this.zNode.zrender);
 
-        // setTimeout(() => {
-        //     this.xNode.updateValue(123.456);
-        // }, 10000);
+
+        setInterval(() => {
+            this.updateZrender(this.xNode);
+            this.updateZrender(this.yNode);
+            this.updateZrender(this.zNode);
+
+        }, 80);
+
+    }
+    private updateZrender(node: PositionZrenderNode) {
+        let pre = Math.round(Math.random() * 2000);
+        if (pre < 500) {
+            pre *= -1;
+        }
+        const next = this.getRandom(3, 300);
+        const value = `${pre}.${next}`;
+        node.updateValue(value);
+    }
+    private getRandom(len: number, maxValue: number): string {
+        const temp = Math.round(Math.random() * maxValue);
+
+        const update = (Array(len).join('0') + temp).slice(-len);
+        return update;
     }
 }
 
 
-class PositionZrenderNode {
+class PositionZrenderNode extends BaseAssetsNode {
     public zrender: any;
     private fontBg: any;
     constructor(private x: number, private y: number, private title: string, public id: string, public value: string) {
+        super();
         var group = new zrender.Group();
         group.position[0] = this.x;
         group.position[1] = this.y;
@@ -51,7 +72,7 @@ class PositionZrenderNode {
         });
         this.fontBg = new zrender.Image({
             style: {
-                image: '../../../../assets/images/bg-position.png',
+                image: `${this.basePath}/images/bg-position.png`,
                 width: 171,
                 height: 78,
                 x: 0,

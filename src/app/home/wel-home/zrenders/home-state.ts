@@ -1,12 +1,13 @@
-import { IZrenderNode } from "./zrender-Factory";
+import { IZrenderNode, BaseAssetsNode } from "./zrender-Factory";
 
-export class HomeState implements IZrenderNode {
+export class HomeState extends BaseAssetsNode implements IZrenderNode {
     public MainElementNodes: any[] = [];
     private mainBg: any;
     constructor() {
+        super();
         this.mainBg = new zrender.Image({
             style: {
-                image: '../../../../assets/images/green.gif',
+                image: `${this.basePath}/images/green.gif`,
                 width: 240,
                 height: 20,
                 x: 200
@@ -17,7 +18,7 @@ export class HomeState implements IZrenderNode {
 
     public updateState(state: string) {
         this.mainBg.attr('style', {
-            image: `../../../../assets/images/${state}.gif`
+            image: `${this.basePath}/images/${state}.gif`
         });
     }
 }

@@ -3,7 +3,6 @@ import { HomeSpeed } from "./home-speed";
 import { HomePosition } from "./home-position";
 import { HomeModal } from "./home-modal";
 import { HomeProgram } from "./home-program";
-import { HomeState } from "./home-state";
 import { HomeAlarm } from "./home-alarm";
 
 
@@ -26,7 +25,6 @@ export class MainZrenderFactory {
         this.homeModal.MainElementNodes.forEach(d => this.mainZrender.add(d));
         this.homeProgram.MainElementNodes.forEach(d => this.mainZrender.add(d));
         this.homeAlarm.MainElementNodes.forEach(d => this.mainZrender.add(d));
-        // this.mainZrender.add(this.background.background);
         this.homeSpeed.MainElementNodes.forEach(d => this.mainZrender.add(d));
     }
 }

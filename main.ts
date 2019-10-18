@@ -11,7 +11,6 @@ function createWindow() {
 
   const electronScreen = screen;
   const size = electronScreen.getPrimaryDisplay().workAreaSize;
-  electron_1.Menu.setApplicationMenu(null);
   // Create the browser window.
   win = new BrowserWindow({
     x: 0,
@@ -27,11 +26,14 @@ function createWindow() {
 
   });
   if (serve) {
+
     require('electron-reload')(__dirname, {
       electron: require(`${__dirname}/node_modules/electron`)
     });
     win.loadURL('http://localhost:4200');
   } else {
+    electron_1.Menu.setApplicationMenu(null);
+
     win.loadURL(url.format({
       pathname: path.join(__dirname, 'dist/index.html'),
       protocol: 'file:',

@@ -14,6 +14,7 @@ export class HomeSpeed extends BaseAssetsNode implements IZrenderNode {
                 height: 330,
                 x: 498,
                 y: 154
+               
             }
         });
 
@@ -50,6 +51,13 @@ export class HomeSpeed extends BaseAssetsNode implements IZrenderNode {
                 textOffset: [0, 0]
             }
         });
+        const gradient = new zrender.LinearGradient(1, 1, 1, 0, [{
+            offset: 0.8,
+            color: '#171717'
+        }, {
+            offset: 0,
+            color: '#808080'
+        }]);
         const sector = new zrender.Sector({
             shape: {
                 cx: 679,
@@ -60,7 +68,7 @@ export class HomeSpeed extends BaseAssetsNode implements IZrenderNode {
                 endAngle: Math.PI * 0.698
             },
             style: {
-                fill: '#808080',
+                fill: gradient,
             }
         });
         this.speedProgressZrender = new zrender.Sector({
@@ -70,10 +78,15 @@ export class HomeSpeed extends BaseAssetsNode implements IZrenderNode {
                 r: 148,
                 r0: 110,
                 startAngle: this.getAngle(0).startAngle,
-                endAngle: this.getAngle(80).endAngle
+                endAngle: this.getAngle(60).endAngle
             },
             style: {
-                fill: 'green',
+                fill: 'rgba(200,169,80)',
+                shadowBlur: 20,
+                shadowColor: 'rgba(5,5,5)',
+                shadowOffsetX: 0,
+               
+
             }
         });
         this.MainElementNodes.push(speedBackground);
@@ -96,7 +109,7 @@ export class HomeSpeed extends BaseAssetsNode implements IZrenderNode {
         setInterval(() => {
             const temp = Math.round(Math.random() * 100);
             this.updateMainProgress(temp);
-        }, 500);
+        }, 1000);
         setInterval(() => {
             const temp = Math.round(Math.random() * 2000);
             this.updateSpeedTop(temp);
@@ -124,20 +137,35 @@ export class HomeSpeed extends BaseAssetsNode implements IZrenderNode {
     }
 
     public updateMainProgress(progress: number) {
+
         let color = 'white';
         if (progress <= 30) {
             color = 'green';
         } else if (progress <= 70) {
-            color = 'yellow'
+            color = 'rgba(200,169,80)'
         } else if (progress > 70) {
-            color = 'red';
+            color = 'rgba(255,63,0)';
         }
-        this.speedProgressZrender.attr('shape', {
-            endAngle: this.getAngle(progress).endAngle
-        });
+        const gradient = new zrender.LinearGradient(0, 0, 1, 1, [{
+            offset: 0.8,
+            color: '#415612'
+        }, {
+            offset: 0.1,
+            color: color
+        }]);
         this.speedProgressZrender.attr('style', {
-            fill: color,
+            fill: progress > 50 ? color : gradient,
         });
+        this.speedProgressZrender.animateTo({
+            shape: {
+                endAngle: this.getAngle(progress).endAngle,
+            },
+            // style: {
+            //     fill: gradient,
+            //     //stroke: 'transparent',
+            // }
+        }, 200, 0, 'quadraticIn');
+
     }
 
 }

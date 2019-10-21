@@ -5,12 +5,11 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { PageNotFoundComponent } from './components/';
 import { WebviewDirective } from './directives/';
-import { SignalrServcieProxyService } from './services/signalr-servcie-proxy.service';
 
 @NgModule({
   declarations: [PageNotFoundComponent, WebviewDirective],
   imports: [CommonModule, TranslateModule],
   exports: [TranslateModule, WebviewDirective],
-  providers:[SignalrServcieProxyService]
+  providers:[]
 })
 export class SharedModule {}

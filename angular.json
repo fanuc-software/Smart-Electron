@@ -22,7 +22,7 @@
               "src/favicon.png",
               "src/favicon.icns",
               "src/favicon.256x256.png",
-              "src/favicon.512x512.png"             
+              "src/favicon.512x512.png"
             ],
             "styles": [
               "src/styles.scss"
@@ -42,7 +42,8 @@
               "node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.moment.js",
               "node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.signalr.js",
               "node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.signalr-client.js",
-              "node_modules/zrender/dist/zrender.js"
+              "node_modules/zrender/dist/zrender.js",
+              "node_modules/@elastic/numeral/numeral.js"
             ]
           },
           "configurations": {

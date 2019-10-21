@@ -2,15 +2,21 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppConsts } from '../AppConsts';
 
-@Injectable()
+@Injectable({
+
+  providedIn: 'root'
+
+})
 export class SignalrServcieProxyService {
-  chatHub = null;
-  cncHub = null;
+  private chatHub = null;
+  private cncHub = null;
+  private webClientHub = null;
   constructor(private router: Router) {
-    // this.initSignalr();
-   // this.initCncSignalr();
+    this.initSignalr();
+    this.initCncSignalr();
+    this.initCncWebClientSignalr();
   }
-  initSignalr() {
+  private initSignalr() {
 
     abp.signalr.startConnection(AppConsts.remoteServiceBaseUrl + '/hubs-routeHub', (connection) => {
       this.chatHub = connection; // Save a reference to the hub
@@ -28,29 +34,52 @@ export class SignalrServcieProxyService {
       abp.log.debug('Connected to routeHub server!');
     });
   }
-  initCncSignalr() {
+  private initCncSignalr() {
     abp.signalr.startConnection(AppConsts.remoteServiceBaseUrl + '/hubs-cncHub', (connection) => {
       this.cncHub = connection; // Save a reference to the hub
-      connection.on('GetCNCData', (message: string) => { // Register for incoming messages
-        console.log("[GetCNCData ]: ", message);
-
+      connection.on('GetCNCData', (message: any) => { // Register for incoming messages
+       // console.log("[GetCNCData ]: ", message);
+        abp.event.trigger(AppConsts.abpEvent.GetCNCDataEvent, message.data);
       });
       connection.on('GetError', (message: string) => { // Register for incoming messages
         console.log("[GetError ]: ", message);
 
       });
     }).then((connection) => {
-      abp.log.debug('Connected to cncHub server!');
-      abp.event.trigger('connectSuccesss', true);
     });
     abp.event.on('cncRefreshEvent', (s) => {
       console.log(JSON.stringify(s));
       this.cncHub.invoke('refresh', JSON.stringify(s));
-    //  this.cncHub.invoke('sendMessage', JSON.stringify(s));
+      //  this.cncHub.invoke('sendMessage', JSON.stringify(s));
 
-      
+
     });
   }
+  private initCncWebClientSignalr() {
+
+    abp.signalr.startConnection(AppConsts.remoteServiceBaseUrl + '/hubs-cncWebClient', (connection) => {
+      this.webClientHub = connection; // Save a reference to the hub
+
+    }).then((connection) => {
+      abp.log.debug('Connected to cncWebClient server!');
+      abp.event.trigger(AppConsts.abpEvent.WebClientConnectedEvent, "SUCCESS");
+
+    });
+    abp.event.on(AppConsts.abpEvent.HomePageOnLoadEvent, (s) => {
+      if (this.webClientHub) {
+        this.webClientHub.invoke('pageOnLoad');
+
+      }
+    });
+    abp.event.on(AppConsts.abpEvent.HomePageOnLeaveEvent, (s) => {
+      if (this.webClientHub) {
+        this.webClientHub.invoke('pageOnLeave');
+
+      }
+    });
+
+  }
+
 
 
 

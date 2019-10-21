@@ -18,22 +18,36 @@ export class HomeProgram extends BaseAssetsNode implements IZrenderNode {
         });
         this.codeZrender = new zrender.Text({
             style: {
-                y: 120,
-                x: 80,
+                y: 100,
+                x: 100,
                 text: this.defaultCode,
                 fontSize: 12,
                 fontFamily: 'PingFangSC-Medium',
                 textFill: '#82B1C9',
                 textAlign: 'left',
                 textLineHeight: 17
+
             }
         });
         group.add(mainBg);
         group.add(this.codeZrender);
         this.MainElementNodes.push(group);
     }
+    public refresh(node: any) {
+        if (node.fullNamespace == "MMK.SmartSystem.WebCommon.DeviceModel.ReadProgramStrResultModel" && Array.isArray(node.value) && node.value.length > 0) {
+            if (node.value[0].id == 'Home-Program') {
+                const arrCode = node.value[0].value.split('\n');
+                const len = arrCode.length > 10 ? 10 : arrCode.length;
+                let code = '';
+                for (let index = 0; index < len; index++) {
+                    code += arrCode[index] + '\n';
 
-    public updateCode(programStr: string) {
+                }
+                this.updateCode(code);
+            }
+        }
+    }
+    private updateCode(programStr: string) {
         this.codeZrender.attr('style', {
             text: programStr
         })

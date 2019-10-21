@@ -14,7 +14,7 @@ export class HomeSpeed extends BaseAssetsNode implements IZrenderNode {
                 height: 330,
                 x: 498,
                 y: 154
-               
+
             }
         });
 
@@ -85,7 +85,7 @@ export class HomeSpeed extends BaseAssetsNode implements IZrenderNode {
                 shadowBlur: 20,
                 shadowColor: 'rgba(5,5,5)',
                 shadowOffsetX: 0,
-               
+
 
             }
         });
@@ -110,10 +110,7 @@ export class HomeSpeed extends BaseAssetsNode implements IZrenderNode {
             const temp = Math.round(Math.random() * 100);
             this.updateMainProgress(temp);
         }, 1000);
-        setInterval(() => {
-            const temp = Math.round(Math.random() * 2000);
-            this.updateSpeedTop(temp);
-        }, 100);
+
     }
     private getAngle(progress: number) {
         const start = 2.1928;
@@ -129,11 +126,16 @@ export class HomeSpeed extends BaseAssetsNode implements IZrenderNode {
         const endAngle = (start + total * progress) % (2 * Math.PI);
         return { startAngle: start, endAngle: endAngle }
     }
-    public updateSpeedTop(value: number) {
-        const update = (Array(4).join('0') + value).slice(-4);
-        this.speedTopZrender.attr('style', {
-            text: update
-        });
+
+    public refresh(node: any) {
+
+        if (node.fullNamespace == 'MMK.SmartSystem.WebCommon.DeviceModel.ReadFeedrateResultModel' && Array.isArray(node.value) && node.value.length > 0) {
+            const newValue = node.value[0].value;
+            const update = (Array(4).join('0') + newValue).slice(-4);
+            this.speedTopZrender.attr('style', {
+                text: update
+            });
+        }
     }
 
     public updateMainProgress(progress: number) {
@@ -195,14 +197,14 @@ class CircleZrenderNode {
         }
     }
     public updateProgerss(progress: number) {
-        let color = 'white';
-        if (progress <= 30) {
-            color = 'green';
-        } else if (progress <= 70) {
-            color = 'yellow'
-        } else if (progress > 70) {
-            color = 'red';
-        }
+        let color = 'green';
+        // if (progress <= 30) {
+        //     color = 'green';
+        // } else if (progress <= 70) {
+        //     color = 'yellow'
+        // } else if (progress > 70) {
+        //     color = 'red';
+        // }
         this.mainZrenderNodes.forEach(d => {
             d.mainZrender.attr('style', {
                 stroke: 'white'
@@ -228,7 +230,10 @@ class CircleLineNode {
             },
             style: {
                 stroke: 'white',
-                lineWidth: 1
+                fill: 'white',
+                lineWidth: 0.8,
+                // percent: 0,
+                // lineWidth: 1
 
             }
         });

@@ -14,7 +14,7 @@ declare var App: any; // Related to Metronic
 declare var Layout: any; // Related to Metronic
 declare var zrender: any;
 declare var Push: any;
-
+declare var numeral: any;
 interface JQuery {
   countTo(...any): any;
 }

@@ -5,6 +5,7 @@ export class HomePosition implements IZrenderNode {
     private xNode: PositionZrenderNode;
     private yNode: PositionZrenderNode;
     private zNode: PositionZrenderNode;
+    private nodes: PositionZrenderNode[] = [];
     constructor() {
         this.xNode = new PositionZrenderNode(64, 603, 'X', 'positonX', '-5.142');
         this.yNode = new PositionZrenderNode(235, 603, 'Y', 'positonY', '-1000.000');
@@ -14,30 +15,29 @@ export class HomePosition implements IZrenderNode {
         this.MainElementNodes.push(this.yNode.zrender);
         this.MainElementNodes.push(this.zNode.zrender);
 
-
-        setInterval(() => {
-            this.updateZrender(this.xNode);
-            this.updateZrender(this.yNode);
-            this.updateZrender(this.zNode);
-
-        }, 80);
+        this.nodes.push(this.xNode);
+        this.nodes.push(this.yNode);
+        this.nodes.push(this.zNode);
 
     }
-    private updateZrender(node: PositionZrenderNode) {
-        let pre = Math.round(Math.random() * 2000);
-        if (pre < 500) {
-            pre *= -1;
+    public refresh(node: any) {
+
+        if (node.fullNamespace == 'MMK.SmartSystem.WebCommon.DeviceModel.ReadPositionResultItemModel' && Array.isArray(node.value)) {
+            node.value.forEach(item => {
+                const find = this.nodes.filter(d => d.id == item.id);
+                if (find && find.length > 0) {
+                    this.updateZrender(find[0], item.value);
+                }
+            });
         }
-        const next = this.getRandom(3, 300);
-        const value = `${pre}.${next}`;
+    }
+    private updateZrender(node: PositionZrenderNode, position: number) {
+
+        const value = numeral(position).format('0.000');
+
         node.updateValue(value);
     }
-    private getRandom(len: number, maxValue: number): string {
-        const temp = Math.round(Math.random() * maxValue);
 
-        const update = (Array(len).join('0') + temp).slice(-len);
-        return update;
-    }
 }
 
 

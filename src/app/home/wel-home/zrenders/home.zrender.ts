@@ -4,6 +4,7 @@ import { HomePosition } from "./home-position";
 import { HomeModal } from "./home-modal";
 import { HomeProgram } from "./home-program";
 import { HomeAlarm } from "./home-alarm";
+import { SignalrServcieProxyService } from "../../../shared/services/signalr-servcie-proxy.service";
 
 
 export class MainZrenderFactory {
@@ -14,7 +15,7 @@ export class MainZrenderFactory {
     private homeProgram: HomeProgram = new HomeProgram();
     private homeAlarm: HomeAlarm = new HomeAlarm();
     private mainZrender: any;
-    constructor(mainElement: HTMLElement) {
+    constructor(mainElement: HTMLElement, private serviceProxy: SignalrServcieProxyService) {
         this.mainZrender = zrender.init(mainElement);
 
     }
@@ -26,5 +27,12 @@ export class MainZrenderFactory {
         this.homeProgram.MainElementNodes.forEach(d => this.mainZrender.add(d));
         this.homeAlarm.MainElementNodes.forEach(d => this.mainZrender.add(d));
         this.homeSpeed.MainElementNodes.forEach(d => this.mainZrender.add(d));
+
+    }
+
+    public Refresh(node: any) {
+        this.homePositrion.refresh(node);
+        this.homeSpeed.refresh(node);
+        this.homeProgram.refresh(node);
     }
 }

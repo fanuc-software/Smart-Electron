@@ -151,17 +151,17 @@ export class HomeSpeed extends BaseAssetsNode implements IZrenderNode {
 
     private updateMainProgress(progress: number) {
 
-        let color = 'white';
-        if (progress <= 30) {
-            color = 'green';
-        } else if (progress <= 70) {
-            color = 'rgba(200,169,80)'
-        } else if (progress > 70) {
-            color = 'rgba(255,63,0)';
-        }
+        let color = '#F1DB6C';
+        // if (progress <= 30) {
+        //     color = 'green';
+        // } else if (progress <= 70) {
+        //     color = 'rgba(200,169,80)'
+        // } else if (progress > 70) {
+        //     color = 'rgba(255,63,0)';
+        // }
         const gradient = new zrender.LinearGradient(0, 0, 1, 1, [{
             offset: 0.8,
-            color: '#415612'
+            color: '#DE893A'
         }, {
             offset: 0.1,
             color: color
@@ -208,7 +208,7 @@ class CircleZrenderNode {
         }
     }
     public updateProgerss(progress: number) {
-        let color = 'green';
+        let color = '#DF7B3D';
         // if (progress <= 30) {
         //     color = 'green';
         // } else if (progress <= 70) {

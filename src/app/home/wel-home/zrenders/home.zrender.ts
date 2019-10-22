@@ -34,5 +34,8 @@ export class MainZrenderFactory {
         this.homePositrion.refresh(node);
         this.homeSpeed.refresh(node);
         this.homeProgram.refresh(node);
+        this.homeModal.refresh(node);
+        this.background.refresh(node);
+        this.homeAlarm.refresh(node);
     }
 }

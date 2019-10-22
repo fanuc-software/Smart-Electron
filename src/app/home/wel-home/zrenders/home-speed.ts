@@ -5,6 +5,7 @@ export class HomeSpeed extends BaseAssetsNode implements IZrenderNode {
     public MainElementNodes: any[] = [];
     private speedTopZrender: any;
     private speedProgressZrender: any;
+    private maxFinishTime = 0;
     constructor() {
         super();
         const speedBackground = new zrender.Image({
@@ -78,7 +79,7 @@ export class HomeSpeed extends BaseAssetsNode implements IZrenderNode {
                 r: 148,
                 r0: 110,
                 startAngle: this.getAngle(0).startAngle,
-                endAngle: this.getAngle(60).endAngle
+                endAngle: this.getAngle(0).endAngle
             },
             style: {
                 fill: 'rgba(200,169,80)',
@@ -97,21 +98,9 @@ export class HomeSpeed extends BaseAssetsNode implements IZrenderNode {
         this.MainElementNodes.push(speedCrcle);
         this.MainElementNodes.push(this.speedTopZrender);
         this.maxCircleNode.mainZrenderNodes.forEach(d => this.MainElementNodes.push(d.mainZrender));
-        this.doWork();
-    }
-
-    private doWork() {
-        setInterval(() => {
-            const temp = Math.round(Math.random() * 100);
-            this.maxCircleNode.updateProgerss(temp);
-        }, 2000);
-
-        setInterval(() => {
-            const temp = Math.round(Math.random() * 100);
-            this.updateMainProgress(temp);
-        }, 1000);
 
     }
+
     private getAngle(progress: number) {
         const start = 2.1928;
         const end = 0.9578;
@@ -135,10 +124,32 @@ export class HomeSpeed extends BaseAssetsNode implements IZrenderNode {
             this.speedTopZrender.attr('style', {
                 text: update
             });
+            return;
+        }
+        if (node.fullNamespace == 'MMK.SmartSystem.WebCommon.DeviceModel.ReadPmcResultItemModel' && Array.isArray(node.value) && node.value.length > 0) {
+
+            let newVal = node.value.filter(d => d.id === 'Home-feedov');
+            if (newVal && newVal.length > 0) {
+                this.updateMainProgress(newVal[0].value);
+            }
+            newVal = node.value.filter(d => d.id === 'Home-finshTime');
+            if (newVal && newVal.length > 0) {
+                this.maxFinishTime = newVal[0].value;
+            }
+        }
+        if (node.fullNamespace == 'MMK.SmartSystem.WebCommon.DeviceModel.ReadCycleTimeResultModel' && Array.isArray(node.value) && node.value.length > 0) {
+
+            let newVal = node.value.filter(d => d.id === 'Home-cycleTime');
+            if (newVal && newVal.length > 0) {
+                const temp = this.maxFinishTime == 0 ? 0 : newVal[0].value / this.maxFinishTime;
+                this.maxCircleNode.updateProgerss(Math.round(temp * 100));
+
+            }
+
         }
     }
 
-    public updateMainProgress(progress: number) {
+    private updateMainProgress(progress: number) {
 
         let color = 'white';
         if (progress <= 30) {
@@ -264,7 +275,6 @@ class CircleNode {
             start += len;
             index++;
         }
-        console.log(index);
     }
 }
 

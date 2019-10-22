@@ -12,6 +12,7 @@ export class SignalrServcieProxyService {
   private cncHub = null;
   private webClientHub = null;
   constructor(private router: Router) {
+    abp.signalr.autoConnect = false;
     this.initSignalr();
     this.initCncSignalr();
     this.initCncWebClientSignalr();
@@ -38,7 +39,7 @@ export class SignalrServcieProxyService {
     abp.signalr.startConnection(AppConsts.remoteServiceBaseUrl + '/hubs-cncHub', (connection) => {
       this.cncHub = connection; // Save a reference to the hub
       connection.on('GetCNCData', (message: any) => { // Register for incoming messages
-       // console.log("[GetCNCData ]: ", message);
+        // console.log("[GetCNCData ]: ", message);
         abp.event.trigger(AppConsts.abpEvent.GetCNCDataEvent, message.data);
       });
       connection.on('GetError', (message: string) => { // Register for incoming messages

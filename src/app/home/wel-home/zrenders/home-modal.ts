@@ -9,6 +9,8 @@ export class HomeModal extends BaseAssetsNode implements IZrenderNode {
     private frNode: CodeZrenderNode;
     private duNode: CodeZrenderNode;
     private paNode: CodeZrenderNode;
+
+    private macroNodes: CodeZrenderNode[] = [];
     constructor() {
         super();
         var group = new zrender.Group();
@@ -27,10 +29,14 @@ export class HomeModal extends BaseAssetsNode implements IZrenderNode {
         });
         this.leftProgram = new ProgramZrenderNode(this.positon.x + 5, this.positon.y, '000000', '');
         this.rightProgram = new ProgramZrenderNode(this.positon.x + 360, this.positon.y, 'N', '00000000');
-        this.pcNode = new CodeZrenderNode(this.positon.x + 30, this.positon.y + 50, 'Pc', '10000');
-        this.frNode = new CodeZrenderNode(this.positon.x + 180, this.positon.y + 50, 'Fr', '100');
-        this.duNode = new CodeZrenderNode(this.positon.x + 300, this.positon.y + 50, 'Du', '100');
-        this.paNode = new CodeZrenderNode(this.positon.x + 420, this.positon.y + 50, 'Pa', '100');
+        this.pcNode = new CodeZrenderNode(this.positon.x + 30, this.positon.y + 50, 'Pc', '100', 3, 'Home-macroPc');
+        this.frNode = new CodeZrenderNode(this.positon.x + 150, this.positon.y + 50, 'Fr', '100', 3, 'Home-macroFr');
+        this.duNode = new CodeZrenderNode(this.positon.x + 270, this.positon.y + 50, 'Du', '100', 3, 'Home-macroDu');
+        this.paNode = new CodeZrenderNode(this.positon.x + 390, this.positon.y + 50, 'Pa', '100', 3, 'Home-macroPa');
+        this.macroNodes.push(this.pcNode);
+        this.macroNodes.push(this.frNode);
+        this.macroNodes.push(this.duNode);
+        this.macroNodes.push(this.paNode);
         group.add(bg);
         this.MainElementNodes.push(group);
         this.MainElementNodes.push(this.leftProgram.programZrender);
@@ -39,38 +45,38 @@ export class HomeModal extends BaseAssetsNode implements IZrenderNode {
         this.MainElementNodes.push(this.frNode.codeZrender);
         this.MainElementNodes.push(this.duNode.codeZrender);
         this.MainElementNodes.push(this.paNode.codeZrender);
-        setInterval(() => {
-            this.updateProgram(this.leftProgram, 6, 200000);
-            this.updateProgram(this.rightProgram, 8, 20000000);
 
-        }, 2000);
-        setInterval(() => {
-            this.updateCode(this.pcNode, 5, 20000);
-            this.updateCode(this.frNode, 3, 200);
-            this.updateCode(this.duNode, 3, 200);
-            this.updateCode(this.paNode, 3, 200);
 
-        }, 200);
     }
-
-    public updateProgram(node: ProgramZrenderNode, len: number, maxValue: number) {
-        const temp = Math.round(Math.random() * maxValue);
-
-        const update = (Array(len).join('0') + temp).slice(-len);
-        if (node.value.length > 0) {
-            node.updateValue(update);
-
-        } else {
-            node.updateTitle(update);
+    public refresh(node: any) {
+        this.updateCode(node);
+        this.updateProgram(node);
+    }
+    private updateProgram(node: any) {
+        if (node.fullNamespace === 'MMK.SmartSystem.WebCommon.DeviceModel.ReadProgramBlockResultModel' && Array.isArray(node.value) && node.value.length > 0) {
+            if (node.value[0].id === 'Home-ProgramBlock') {
+                this.rightProgram.updateValue(node.value[0].valueStr);
+            }
+        }
+        if (node.fullNamespace === 'MMK.SmartSystem.WebCommon.DeviceModel.ReadProgramNameResultModel' && Array.isArray(node.value) && node.value.length > 0) {
+            if (node.value[0].id === 'Home-ProgramName') {
+                this.leftProgram.updateTitle(node.value[0].value.name);
+            }
         }
 
-
     }
-    public updateCode(node: CodeZrenderNode, len: number, maxValue: number) {
-        const temp = Math.round(Math.random() * maxValue);
+    private updateCode(node: any) {
+        if (node.fullNamespace === 'MMK.SmartSystem.WebCommon.DeviceModel.ReadMacroResultItemModel' && Array.isArray(node.value)) {
+            node.value.forEach(item => {
+                const find = this.macroNodes.filter(d => d.id == item.id);
+                if (find && find.length > 0) {
+                    const temp = Number.parseInt(item.value + '', 10);
+                    const update = (Array(find[0].len).join('0') + temp).slice(-find[0].len);
 
-        const update = (Array(len).join('0') + temp).slice(-len);
-        node.updateValue(update);
+                    find[0].updateValue(update);
+                }
+            });
+        }
 
 
     }
@@ -82,7 +88,7 @@ class CodeZrenderNode {
     private valueZrender: any;
     private zrenderTitle: any;
     constructor(private x: number, private y: number,
-        private title: string, public value: string) {
+        private title: string, public value: string, public len: number, public id: string) {
         this.codeZrender = new zrender.Group();
         this.codeZrender.position[0] = this.x;
         this.codeZrender.position[1] = this.y;

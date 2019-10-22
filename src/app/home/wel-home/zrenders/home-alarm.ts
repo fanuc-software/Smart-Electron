@@ -2,48 +2,83 @@ import { IZrenderNode, BaseAssetsNode } from "./zrender-Factory";
 
 export class HomeAlarm implements IZrenderNode {
     public MainElementNodes: any[] = [];
-    private nodes: AlarmZrenderNode[] = [];
+    private upNode: any;
+    private middleNode: any;
+    private downNode: any;
     constructor() {
 
-        let upProgress = 100;
+        let upProgress = 10;
 
-        const upNode = new AlarmZrenderNode({ x: 280, y: 163 }, { x: 9.4, y: 64.4 }, { x: 4.4, y: 78.6 }, { x: 50, y: 20 }, { x: 59, y: 38 }, { width: 75, height: 99 }, { width: 52, height: 70 }, 'up', upProgress);
+        this.upNode = new AlarmZrenderNode({ x: 280, y: 163 }, { x: 9.4, y: 64.4 }, { x: 4.4, y: 78.6 }, { x: 50, y: 20 }, { x: 59, y: 38 }, { width: 75, height: 99 }, { width: 52, height: 70 }, 'up', upProgress);
+      
+        let middleProgress = 10;
+
+        this.middleNode = new AlarmZrenderNode({ x: 260, y: 240 }, { x: 19.5, y: 62.8 }, { x: 19.5, y: 76.5 }, { x: 65, y: 38 }, { x: 75, y: 52 }, { width: 48, height: 92 }, { width: 24, height: 67 }, 'middle', middleProgress);
         setInterval(() => {
-            upProgress = upProgress % 100;
-            upNode.updateProgress(upProgress);
-            upProgress += 10;
-            upNode.updateGreenState(upProgress <= 50);
-            upNode.updateRedState(upProgress > 50);
-        }, 300);
 
-        let middleProgress = 100;
+            this.upNode.updateProgress(this.getRandom(10, 30));
 
-        const middleNode = new AlarmZrenderNode({ x: 260, y: 240 }, { x: 19.5, y: 62.8 }, { x: 19.5, y: 76.5 }, { x: 65, y: 38 }, { x: 75, y: 52 }, { width: 48, height: 92 }, { width: 24, height: 67 }, 'middle', middleProgress);
-        setInterval(() => {
-            middleProgress = middleProgress % 100;
-            middleProgress == 0 ? 100 : middleProgress;
-            middleNode.updateProgress(middleProgress);
-            middleProgress += 10;
-            middleNode.updateGreenState(middleProgress <= 50);
-            middleNode.updateRedState(middleProgress > 50);
+            this.middleNode.updateProgress(this.getRandom(10, 30));
+            this.downNode.updateProgress(this.getRandom(30, 60));
+
         }, 1000);
 
-        let downProgress = 100;
+        let downProgress = 10;
 
-        const downNode = new AlarmZrenderNode({ x: 260, y: 310 }, { x: 24.5, y: 72 }, { x: 29.5, y: 86.5 }, { x: 65, y: 55 }, { x: 78, y: 69 }, { width: 74, height: 94 }, { width: 52, height: 70 }, 'down', downProgress);
-        setInterval(() => {
-            downProgress += 10;
-            downProgress = downProgress % 100;
-            downProgress == 0 ? 100 : downProgress;
-            downNode.updateProgress(downProgress);
-            downNode.updateGreenState(downProgress <= 50);
-            downNode.updateRedState(downProgress > 50);
-        }, 2000);
+        this.downNode = new AlarmZrenderNode({ x: 260, y: 310 }, { x: 24.5, y: 72 }, { x: 29.5, y: 86.5 }, { x: 65, y: 55 }, { x: 78, y: 69 }, { width: 74, height: 94 }, { width: 52, height: 70 }, 'down', downProgress);
+       
 
-        this.MainElementNodes.push(upNode.mainZrender);
-        this.MainElementNodes.push(middleNode.mainZrender);
-        this.MainElementNodes.push(downNode.mainZrender);
-        this.nodes.push(upNode);
+        this.MainElementNodes.push(this.upNode.mainZrender);
+        this.MainElementNodes.push(this.middleNode.mainZrender);
+        this.MainElementNodes.push(this.downNode.mainZrender);
+    }
+    private getRandom(min: number, max: number) {
+        let val = Math.random() * 100;
+        while (!(val >= min && val < max)) {
+            val = Math.random() * 100;
+        }
+        return Math.round(val / 10) * 10;
+    }
+    public refresh(node: any) {
+        if (node.fullNamespace === 'MMK.SmartSystem.WebCommon.DeviceModel.ReadPmcResultItemModel' && Array.isArray(node.value) && node.value.length > 0) {
+
+            let newVal = node.value.filter(d => d.id === 'Home-xState');
+            if (newVal && newVal.length > 0) {
+                const state = newVal[0].value;
+                if (state === 'True') {
+                    this.upNode.updateGreenState(false);
+                    this.upNode.updateRedState(true);
+                } else {
+                    this.upNode.updateGreenState(true);
+                    this.upNode.updateRedState(false);
+                }
+
+            }
+
+            newVal = node.value.filter(d => d.id === 'Home-yState');
+            if (newVal && newVal.length > 0) {
+                const state = newVal[0].value;
+                if (state === 'True') {
+                    this.middleNode.updateGreenState(false);
+                    this.middleNode.updateRedState(true);
+                } else {
+                    this.middleNode.updateGreenState(true);
+                    this.middleNode.updateRedState(false);
+                }
+            }
+
+            newVal = node.value.filter(d => d.id === 'Home-zState');
+            if (newVal && newVal.length > 0) {
+                const state = newVal[0].value;
+                if (state === 'True') {
+                    this.downNode.updateGreenState(false);
+                    this.downNode.updateRedState(true);
+                } else {
+                    this.downNode.updateGreenState(true);
+                    this.downNode.updateRedState(false);
+                }
+            }
+        }
     }
 }
 

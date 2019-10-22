@@ -23,7 +23,7 @@ export class HomeBackground extends BaseAssetsNode implements IZrenderNode {
         });
         this.alarmState = new zrender.Image({
             style: {
-                image:`${this.basePath}/images/normal.png`,
+                image: `${this.basePath}/images/normal.png`,
                 width: 72,
                 height: 57,
                 x: 80,
@@ -33,13 +33,18 @@ export class HomeBackground extends BaseAssetsNode implements IZrenderNode {
         this.MainElementNodes.push(background);
         this.MainElementNodes.push(title);
         this.MainElementNodes.push(this.alarmState);
-        let isAlarm = false;
-        setInterval(() => {
-            this.updateRunState(isAlarm);
-            isAlarm = !isAlarm;
-        }, 1000);
+
     }
-    public updateRunState(isAlarm: boolean) {
+    public refresh(node: any) {
+        if (node.fullNamespace == 'MMK.SmartSystem.WebCommon.DeviceModel.ReadPmcResultItemModel' && Array.isArray(node.value) && node.value.length > 0) {
+
+            const newVal = node.value.filter(d => d.id === 'Home-alarmState');
+            if (newVal && newVal.length > 0) {
+                this.updateRunState(newVal[0].value == 'True');
+            }
+        }
+    }
+    private updateRunState(isAlarm: boolean) {
         const imagePath = isAlarm ? 'alarm' : 'normal';
         this.alarmState.attr('style', {
             image: `${this.basePath}/images/${imagePath}.png`

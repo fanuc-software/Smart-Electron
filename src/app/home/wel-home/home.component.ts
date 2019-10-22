@@ -12,7 +12,7 @@ import { AppConsts } from '../../shared/AppConsts';
 export class HomeComponent extends BaseAssetsNode implements OnInit, OnDestroy {
 
   mainZrender: MainZrenderFactory;
-  imagePath = ['green', 'gray', 'red'];
+  imagePath = ['gray', 'green', 'yellow', 'red'];
   index = 0;
   loadPath = '';
   webClientConnectEvent;
@@ -23,7 +23,17 @@ export class HomeComponent extends BaseAssetsNode implements OnInit, OnDestroy {
       abp.event.trigger(AppConsts.abpEvent.HomePageOnLoadEvent);
     };
     this.cncDataEvent = (node) => {
-      this.mainZrender.Refresh(node);    };
+      if (node.fullNamespace == 'MMK.SmartSystem.WebCommon.DeviceModel.ReadPmcResultItemModel' && Array.isArray(node.value) && node.value.length > 0) {
+
+        const newVal = node.value.filter(d => d.id === 'Home-cncState');
+        if (newVal && newVal.length > 0) {
+          this.index = newVal[0].value;
+          this.loadPath = this.getImageSrc();
+        }
+     
+      }
+      this.mainZrender.Refresh(node);
+    };
   }
 
   ngOnInit() {
@@ -31,7 +41,6 @@ export class HomeComponent extends BaseAssetsNode implements OnInit, OnDestroy {
 
     this.mainZrender.build();
     this.loadPath = this.getImageSrc();
-    setInterval(() => this.loadPath = this.getImageSrc(), 1500);
     abp.event.on(AppConsts.abpEvent.WebClientConnectedEvent, this.webClientConnectEvent);
     abp.event.on(AppConsts.abpEvent.GetCNCDataEvent, this.cncDataEvent);
   }

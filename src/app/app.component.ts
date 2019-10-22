@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { ElectronService } from './core/services';
 import { TranslateService } from '@ngx-translate/core';
 import { AppConfig } from '../environments/environment';
-import { SignalrServcieProxyService } from './shared/services/signalr-servcie-proxy.service';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +12,7 @@ export class AppComponent {
   constructor(
     public electronService: ElectronService,
     private translate: TranslateService,
-    private signalr: SignalrServcieProxyService
+    
   ) {
     translate.setDefaultLang('en');
     console.log('AppConfig', AppConfig);

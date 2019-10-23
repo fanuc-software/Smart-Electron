@@ -45,7 +45,7 @@ export class HomeSpeed extends BaseAssetsNode implements IZrenderNode {
                 height: 211,
                 x: 573.5,
                 y: 230,
-                text: '1500',
+                text: '0000',
                 fontSize: 70,
                 fontFamily: 'DINCondensed-Bold',
                 textFill: '#474646',

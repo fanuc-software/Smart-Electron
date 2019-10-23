@@ -13,12 +13,12 @@ function createWindow() {
   const size = electronScreen.getPrimaryDisplay().workAreaSize;
   // Create the browser window.
   win = new BrowserWindow({
-    x: 0,
-    y: 0,
-    // width: size.width,
-    // height: size.height,
-    width: 1400,
-    height: 840,
+    width: 1366,
+    height: 768,
+    frame: false,
+    center: true,
+    // resizable: false,
+    // movable: false,
     webPreferences: {
       nodeIntegration: true,
       webviewTag: true
@@ -26,7 +26,18 @@ function createWindow() {
 
   });
   if (serve) {
-
+    win = new BrowserWindow({
+      width: 1400,
+      height: 800,
+    
+      center: true,
+    
+      webPreferences: {
+        nodeIntegration: true,
+        webviewTag: true
+      },
+  
+    });
     require('electron-reload')(__dirname, {
       electron: require(`${__dirname}/node_modules/electron`)
     });

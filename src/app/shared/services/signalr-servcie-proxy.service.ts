@@ -34,6 +34,11 @@ export class SignalrServcieProxyService {
     }).then((connection) => {
       abp.log.debug('Connected to routeHub server!');
     });
+    abp.event.on(AppConsts.abpEvent.LinkHomeEvent, (node) => {
+      abp.log.debug(node);
+
+      this.chatHub.invoke('navHome');
+    });
   }
   private initCncSignalr() {
     abp.signalr.startConnection(AppConsts.remoteServiceBaseUrl + '/hubs-cncHub', (connection) => {
@@ -48,13 +53,7 @@ export class SignalrServcieProxyService {
       });
     }).then((connection) => {
     });
-    abp.event.on('cncRefreshEvent', (s) => {
-      console.log(JSON.stringify(s));
-      this.cncHub.invoke('refresh', JSON.stringify(s));
-      //  this.cncHub.invoke('sendMessage', JSON.stringify(s));
 
-
-    });
   }
   private initCncWebClientSignalr() {
 

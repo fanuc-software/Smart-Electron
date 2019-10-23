@@ -12,7 +12,8 @@ export class AppConsts {
         WebClientConnectedEvent:"WebClientConnectedEvent",
         HomePageOnLoadEvent:'HomePageOnLoadEvent',
         HomePageOnLeaveEvent:'HomePageOnLeaveEvent',
-        GetCNCDataEvent:'GetCNCDataEvent'
+        GetCNCDataEvent:'GetCNCDataEvent',
+        LinkHomeEvent:'NavHomeEvent'
 
     }
 }

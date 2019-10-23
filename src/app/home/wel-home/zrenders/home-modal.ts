@@ -29,10 +29,10 @@ export class HomeModal extends BaseAssetsNode implements IZrenderNode {
         });
         this.leftProgram = new ProgramZrenderNode(this.positon.x + 5, this.positon.y, '000000', '');
         this.rightProgram = new ProgramZrenderNode(this.positon.x + 360, this.positon.y, 'N', '00000000');
-        this.pcNode = new CodeZrenderNode(this.positon.x + 30, this.positon.y + 50, 'Pc', '100', 3, 'Home-macroPc');
-        this.frNode = new CodeZrenderNode(this.positon.x + 150, this.positon.y + 50, 'Fr', '100', 3, 'Home-macroFr');
-        this.duNode = new CodeZrenderNode(this.positon.x + 270, this.positon.y + 50, 'Du', '100', 3, 'Home-macroDu');
-        this.paNode = new CodeZrenderNode(this.positon.x + 390, this.positon.y + 50, 'Pa', '100', 3, 'Home-macroPa');
+        this.pcNode = new CodeZrenderNode(this.positon.x + 30, this.positon.y + 50, 'Pc', '000', 3, 'Home-macroPc');
+        this.frNode = new CodeZrenderNode(this.positon.x + 150, this.positon.y + 50, 'Fr', '000', 3, 'Home-macroFr');
+        this.duNode = new CodeZrenderNode(this.positon.x + 270, this.positon.y + 50, 'Du', '000', 3, 'Home-macroDu');
+        this.paNode = new CodeZrenderNode(this.positon.x + 390, this.positon.y + 50, 'Pa', '000', 3, 'Home-macroPa');
         this.macroNodes.push(this.pcNode);
         this.macroNodes.push(this.frNode);
         this.macroNodes.push(this.duNode);

@@ -7,8 +7,8 @@ export class HomePosition implements IZrenderNode {
     private zNode: PositionZrenderNode;
     private nodes: PositionZrenderNode[] = [];
     constructor() {
-        this.xNode = new PositionZrenderNode(64, 603, 'X', 'positonX', '-5.142');
-        this.yNode = new PositionZrenderNode(235, 603, 'Y', 'positonY', '-1000.000');
+        this.xNode = new PositionZrenderNode(64, 603, 'X', 'positonX', '0.000');
+        this.yNode = new PositionZrenderNode(235, 603, 'Y', 'positonY', '0.000');
         this.zNode = new PositionZrenderNode(406, 603, 'Z', 'positonZ', '0.000');
 
         this.MainElementNodes.push(this.xNode.zrender);

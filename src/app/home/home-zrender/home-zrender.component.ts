@@ -8,8 +8,10 @@ import { Component, OnInit } from '@angular/core';
 export class HomeZrenderComponent implements OnInit {
   mainZrender: any;
   offset = 2;
-  cy = 300;
-  cx = 300;
+  cy = 130;
+  cx = 130;
+  minR = 85;
+  maxR = 95;
   constructor() { }
 
   ngOnInit() {
@@ -18,11 +20,11 @@ export class HomeZrenderComponent implements OnInit {
     });
 
 
-    this.mainZrender.add(this.getGroup(315, 45));
-    this.mainZrender.add(this.getGroup(45, 135));
+    this.mainZrender.add(this.getGroup(315, 45, this.minR, this.maxR, 0));
+    this.mainZrender.add(this.getGroup(45, 135, this.minR, this.maxR, 90));
 
-    this.mainZrender.add(this.getGroup(135, 225));
-    this.mainZrender.add(this.getGroup(225, 315));
+    this.mainZrender.add(this.getGroup(135, 225, this.minR, this.maxR, 180));
+    this.mainZrender.add(this.getGroup(225, 315, this.minR, this.maxR, 270));
 
 
   }
@@ -32,7 +34,7 @@ export class HomeZrenderComponent implements OnInit {
     return ((angule + (this.offset * pre)) / 360) * 2 * Math.PI;
   }
 
-  getGroup(start: number, end: number) {
+  getGroup(start: number, end: number, minR: number, maxR: number, offset: number) {
     const tempGroup = new zrender.Group();
     const rightSector = new zrender.Sector({
       shape: {
@@ -62,14 +64,14 @@ export class HomeZrenderComponent implements OnInit {
       }
     });
 
-    const startX = 140 * Math.cos(this.getAngle(start-1, 1)) + this.cx;
-    const startY = 140 * Math.sin(this.getAngle(start-1, 1)) + this.cy;
+    const startX = 140 * Math.cos(this.getAngle(start - 1, 1)) + this.cx;
+    const startY = 140 * Math.sin(this.getAngle(start - 1, 1)) + this.cy;
     const rect = new zrender.Line({
       shape: {
         x1: startX,
         y1: startY,
-        x2: 48 * Math.cos(this.getAngle(start + 2, 1)) + this.cx,
-        y2: 48 * Math.sin(this.getAngle(start + 2, 1)) + this.cy
+        x2: 48 * Math.cos(this.getAngle(start + 2.5, 1)) + this.cx,
+        y2: 48 * Math.sin(this.getAngle(start + 2.5, 1)) + this.cy
       },
       style: {
         fill: 'white',
@@ -81,8 +83,23 @@ export class HomeZrenderComponent implements OnInit {
     tempGroup.add(rightSector);
     tempGroup.add(rightMinSector);
     tempGroup.add(rect);
+    tempGroup.add(this.getPath(minR, maxR, offset));
     return tempGroup;
   }
 
+  getPath(minR: number, maxR: number, offset: number) {
+    const tempOffset = 10;
+    const startPoint = `M${Math.cos(offset / 360 * 2 * Math.PI) * maxR + this.cx} ${Math.sin(offset / 360 * 2 * Math.PI) * maxR + this.cy}`;
+    const secondPoint = `L${Math.cos((offset + tempOffset) / 360 * 2 * Math.PI) * minR + this.cx} ${Math.sin((offset +tempOffset) / 360 * Math.PI * 2) * minR + this.cy}`;
+    const lastPoint = `L${Math.cos((offset - tempOffset) / 360 * 2 * Math.PI) * minR + this.cx} ${Math.sin((offset - tempOffset) / 360 * Math.PI * 2) * minR + this.cy}`;
+
+    const path = `${startPoint} ${secondPoint} ${lastPoint} Z`;
+    console.log(path);
+    return new zrender.Path(zrender.path.createFromString(`${startPoint} ${secondPoint} ${lastPoint} Z`, {
+      style: {
+        fill: 'black'
+      }
+    }));
+  }
 
 }

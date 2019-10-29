@@ -6,9 +6,9 @@ import { WebHomeComponent } from './web-home/web-home.component';
 import { HomeZrenderComponent } from './home-zrender/home-zrender.component';
 
 const routes: Routes = [
-  { path: 'zrender', component: HomeComponent },
+  { path: '', component: HomeComponent },
   { path: 'web/:id', component: WebHomeComponent },
-  { path: '', component: HomeZrenderComponent }
+  { path: 'zrender', component: HomeZrenderComponent }
 
 ];
 

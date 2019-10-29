@@ -31,17 +31,23 @@ export class HomeBackground extends BaseAssetsNode implements IZrenderNode {
                 y: 330
             }
         });
-        const linkHome = new zrender.Text({
+        const linkHome = new zrender.Image({
             style: {
-                x: 90,
-                y: 740,
+                image: `${this.basePath}/images/home-link.png`,
+                width: 272,
+                height: 44,
+                x: 0,
+                y: 724,
+              
                 text: '进入首页',
                 fontSize: 20,
                 fontWeight: 1,
                 textFill: 'white',
-
+                textOffset:[0,2.5]
+            
             }
         });
+  
         const linkMenu = new zrender.Text({
             style: {
                 x: 1200,

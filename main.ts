@@ -1,12 +1,12 @@
 import { app, BrowserWindow, screen } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
+import { DialogWindow } from './main-dialog';
 var electron_1 = require("electron");
-
+const ipc = electron_1.ipcMain;
 let win, serve;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
-
 function createWindow() {
 
   const electronScreen = screen;
@@ -17,6 +17,7 @@ function createWindow() {
     height: 768,
     frame: false,
     center: true,
+    resizable:false,
     // resizable: false,
     // movable: false,
     webPreferences: {
@@ -29,14 +30,14 @@ function createWindow() {
     win = new BrowserWindow({
       width: 1400,
       height: 800,
-    
+
       center: true,
-    
+
       webPreferences: {
         nodeIntegration: true,
         webviewTag: true
       },
-  
+
     });
     require('electron-reload')(__dirname, {
       electron: require(`${__dirname}/node_modules/electron`)
@@ -65,7 +66,7 @@ function createWindow() {
   });
 
 }
-
+new DialogWindow().Init(serve);
 try {
 
   // This method will be called when Electron has finished

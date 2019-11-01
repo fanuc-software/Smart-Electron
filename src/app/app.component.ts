@@ -2,28 +2,54 @@ import { Component } from '@angular/core';
 import { ElectronService } from './core/services';
 import { TranslateService } from '@ngx-translate/core';
 import { AppConfig } from '../environments/environment';
+import { Router } from '@angular/router';
+import { AppConsts } from './shared/AppConsts';
 
+import { WebRouteComponentDto } from './shared/services/WebRouteComponentDto';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  constructor(
-    public electronService: ElectronService,
-    private translate: TranslateService,
-    
-  ) {
-    translate.setDefaultLang('en');
-    console.log('AppConfig', AppConfig);
+  constructor(public electronService: ElectronService, private translate: TranslateService, private router: Router) {
+    abp.signalr.autoConnect = false;
 
-    if (electronService.isElectron) {
-      console.log(process.env);
-      console.log('Mode electron');
-      console.log('Electron ipcRenderer', electronService.ipcRenderer);
-      console.log('NodeJS childProcess', electronService.childProcess);
-    } else {
-      console.log('Mode web');
-    }
+    translate.setDefaultLang('en');
+    this.electronService.ipcRenderer.on('NavWebRouter', (event, message: WebRouteComponentDto) => {
+      console.log(message.windowName);
+      this.router.navigate([message.componentUrl, message.windowName]);
+    });
+    this.initSignalr();
+  }
+
+  private initSignalr() {
+
+    abp.signalr.startConnection(AppConsts.remoteServiceBaseUrl + '/hubs-routeHub', (connection) => {
+      // connection.on('GetRoute', (message: string) => {
+      //   console.log("received message: ", message);
+      //   if (!message.toLocaleLowerCase().includes('http')) {
+      //     if (message === 'home-zrender') {
+      //       ipcRenderer.send('open-dialow-window', '/home/zrender');
+      //       return;
+      //     }
+      //     this.router.navigateByUrl(message);
+      //   } else {
+      //     this.router.navigate(['/home/web', message]);
+      //     abp.event.trigger(AppConsts.abpEvent.RefreshUrlEvent, message);
+      //   }
+      // });
+      connection.on('GetWebDialogWindow', (message: WebRouteComponentDto) => {
+        console.log("received message: ", message);
+        this.electronService.ipcRenderer.send('open-dialow-window', message);
+      });
+
+    }).then((connection) => {
+      abp.log.debug('Connected to routeHub server!');
+      abp.event.on(AppConsts.abpEvent.LinkHomeEvent, (node) => {
+        connection.invoke('navHome');
+      });
+    });
+
   }
 }

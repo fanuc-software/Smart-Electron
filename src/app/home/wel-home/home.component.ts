@@ -3,6 +3,7 @@ import { MainZrenderFactory } from './zrenders/home.zrender';
 import { BaseAssetsNode } from './zrenders/zrender-Factory';
 import { SignalrServcieProxyService } from '../../shared/services/signalr-servcie-proxy.service';
 import { AppConsts } from '../../shared/AppConsts';
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: 'app-home',
@@ -17,7 +18,7 @@ export class HomeComponent extends BaseAssetsNode implements OnInit, OnDestroy {
   loadPath = '';
   webClientConnectEvent;
   cncDataEvent;
-  constructor(private serviceProxy: SignalrServcieProxyService) {
+  constructor(private serviceProxy: SignalrServcieProxyService, private titleSet: Title) {
     super();
     this.webClientConnectEvent = (t) => {
       abp.event.trigger(AppConsts.abpEvent.HomePageOnLoadEvent);
@@ -30,7 +31,7 @@ export class HomeComponent extends BaseAssetsNode implements OnInit, OnDestroy {
           this.index = newVal[0].value;
           this.loadPath = this.getImageSrc();
         }
-     
+
       }
       this.mainZrender.Refresh(node);
     };
@@ -56,4 +57,5 @@ export class HomeComponent extends BaseAssetsNode implements OnInit, OnDestroy {
     this.index = this.index % 3;
     return `${this.basePath}/images/${name}.gif`;
   }
+
 }

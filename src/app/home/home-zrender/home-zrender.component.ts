@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { MainData } from './home-data';
+import { Title } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-home-zrender',
@@ -7,121 +10,60 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeZrenderComponent implements OnInit {
   mainZrender: any;
-  offset = 0;
-  cy = 130;
-  cx = 130;
-  minR = 80;
-  maxR = 90;
-  constructor() { }
+  constructor(private titleSet: Title, private routeInfo: ActivatedRoute) {
+    const title = this.routeInfo.snapshot.params['name'];
+    this.titleSet.setTitle(title);
+  }
 
   ngOnInit() {
     this.mainZrender = zrender.init(document.getElementById('main-zrender'), {
-      renderer: 'svg',
+      renderer: 'canvas',
       style: {
         fill: 'red'
       }
     });
 
+    this.start();
 
-    this.mainZrender.add(this.getGroup(315, 45, this.minR, this.maxR, 0, [5, 0]));
-    this.mainZrender.add(this.getGroup(45, 135, this.minR, this.maxR, 90, [0, 5]));
+  }
+  clear() {
+    this.mainZrender.clear();
 
-    this.mainZrender.add(this.getGroup(135, 225, this.minR, this.maxR, 180, [-5, 0]));
-    this.mainZrender.add(this.getGroup(225, 315, this.minR, this.maxR, 270, [0, -5]));
-
+  }
+  start() {
+    console.log('start');
+    this.mainZrender.add(this.getPolyline());
 
   }
 
-  getAngle(angule: number, pre: number, offset: number) {
+  getPolyline() {
+    const arr = [];
+    MainData.forEach(d => {
+      arr.push([parseInt(d.X), parseInt(d.Y)]);
+    });
 
-    return ((angule + (offset * pre)) / 360) * 2 * Math.PI;
-  }
 
-  getGroup(start: number, end: number, minR: number, maxR: number, offset: number, positon: number[]) {
-    const tempGroup = new zrender.Group();
-    // tempGroup.positon[0] = positon[0];
-    // this.cx = 140 + positon[0];
-    // this.cy = 140 + positon[1];
-    // tempGroup.positon[1] = positon[1];
-    const rightSector = new zrender.Sector({
+
+    const temp = new zrender.Polyline({
+      draggable: true,
       shape: {
-        cx: this.cx,
-        cy: this.cy,
-        r: 130,
-        r0: 120,
-        startAngle: this.getAngle(start, 1, this.offset),
-        endAngle: this.getAngle(end, -1, this.offset),
-      },
-      style: {
-        fill: 'black',
-
+        points: arr
       }
     });
-
-
-    const rightMinSector = new zrender.Sector({
-      shape: {
-        cx: this.cx,
-        cy: this.cy,
-        r: 120,
-        r0: 50,
-        startAngle: this.getAngle(start, 1, this.offset),
-        endAngle: this.getAngle(end, -1, this.offset),
-      },
-      style: {
-        fill: 'rgba(155,155,155)',
-        lineWidth: 20
-      }
+    temp.on('mousewheel', (ev) => {
+      var e = (ev || event).wheelDelta / 5;
+      temp.attr({
+        scale: [temp.scale[0] += e, temp.scale[1] += e],
+        origin: [ev.offsetX, ev.offsetY]
+      });
+      //  console.log(ev);
+      // // //设置缩放大小
+      // temp.attr('scale', [temp.scale[0] += e, temp.scale[1] += e]);
+      // //设置缩放中心
+      // temp.attr('origin', [temp.style.x + temp.style.width / 2, temp.style.y + temp.style.height / 2]);
     });
-
-    const startX = 132 * Math.cos(this.getAngle(start, 1, this.offset)) + this.cx;
-    const startY = 132 * Math.sin(this.getAngle(start, 1, this.offset)) + this.cy;
-    const rect = new zrender.Line({
-      shape: {
-        x1: startX,
-        y1: startY,
-        x2: this.cx,
-        y2: this.cy
-      }
-      ,
-      style: {
-        fill: 'white',
-        stroke: 'white',
-        lineWidth: 8
-      }, z: 2
-    });
-
-    tempGroup.add(rightSector);
-    tempGroup.add(rightMinSector);
-    tempGroup.add(rect);
-
-    tempGroup.add(this.getPath(minR, maxR, offset));
-    rightMinSector.on('mouseover', () => {
-      rightMinSector.attr('style', {
-        fill: 'red'
-      })
-    });
-    rightMinSector.on('mouseout', () => {
-      rightMinSector.attr('style', {
-        fill: 'rgba(155,155,155)'
-      })
-    });
-    return tempGroup;
+    return temp;
   }
 
-  getPath(minR: number, maxR: number, offset: number) {
-    const tempOffset = 10;
-    const startPoint = `M${Math.cos(offset / 360 * 2 * Math.PI) * maxR + this.cx} ${Math.sin(offset / 360 * 2 * Math.PI) * maxR + this.cy}`;
-    const secondPoint = `L${Math.cos((offset + tempOffset) / 360 * 2 * Math.PI) * minR + this.cx} ${Math.sin((offset + tempOffset) / 360 * Math.PI * 2) * minR + this.cy}`;
-    const lastPoint = `L${Math.cos((offset - tempOffset) / 360 * 2 * Math.PI) * minR + this.cx} ${Math.sin((offset - tempOffset) / 360 * Math.PI * 2) * minR + this.cy}`;
-
-    const path = `${startPoint} ${secondPoint} ${lastPoint} Z`;
-    console.log(path);
-    return new zrender.Path(zrender.path.createFromString(`${startPoint} ${secondPoint} ${lastPoint} Z`, {
-      style: {
-        fill: 'black'
-      }
-    }));
-  }
 
 }

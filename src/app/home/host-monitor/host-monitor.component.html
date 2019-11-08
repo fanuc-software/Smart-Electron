@@ -1,0 +1,51 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-9">
+            <div>
+                <tabset>
+                    <tab heading="当前轮询数据列表" id="tab0">
+                        <app-cycle-list #cycleList></app-cycle-list>
+                    </tab>
+                    <tab heading="轮询数据结果监控" id="tab1">
+                        <app-cycle-result #cycleResult></app-cycle-result>
+                    </tab>
+                    <tab heading="CNC实时读写监控">
+                        <app-read-writer #readWriter></app-read-writer>
+                    </tab>
+                    <tab heading="程序解析监控">
+                        <app-program-resovle #programResovle></app-program-resovle>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header">
+                    错误日志<button type="button" class="btn btn-link" (click)="removeAll()">清除</button>
+
+                </div>
+                <div class="card-body" style="max-height: 800px; overflow-y: auto;">
+                    <ng-template ngFor let-item [ngForOf]="errNodes">
+                        <div class="alert alert-danger" role="alert">
+                            <p>
+                                <strong>{{item.time}}</strong>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </p>
+                            {{item.text}}
+
+                        </div>
+                    </ng-template>
+                    <div class="alert alert-success" role="alert" *ngIf="errNodes.length==0">
+                        系统运行正常，暂无异常！
+
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

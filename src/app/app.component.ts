@@ -26,19 +26,16 @@ export class AppComponent {
   private initSignalr() {
 
     abp.signalr.startConnection(AppConsts.remoteServiceBaseUrl + '/hubs-routeHub', (connection) => {
-      // connection.on('GetRoute', (message: string) => {
-      //   console.log("received message: ", message);
-      //   if (!message.toLocaleLowerCase().includes('http')) {
-      //     if (message === 'home-zrender') {
-      //       ipcRenderer.send('open-dialow-window', '/home/zrender');
-      //       return;
-      //     }
-      //     this.router.navigateByUrl(message);
-      //   } else {
-      //     this.router.navigate(['/home/web', message]);
-      //     abp.event.trigger(AppConsts.abpEvent.RefreshUrlEvent, message);
-      //   }
-      // });
+      connection.on('GetRoute', (message: string) => {
+        console.log("received message: ", message);
+        if (!message.toLocaleLowerCase().includes('http')) {
+          abp.event.trigger(AppConsts.abpEvent.HomePageOnLoadEvent, message);
+       //   this.router.navigateByUrl(message);
+        } else {
+          this.router.navigate(['/home/web', message]);
+          abp.event.trigger(AppConsts.abpEvent.RefreshUrlEvent, message);
+        }
+      });
       connection.on('GetWebDialogWindow', (message: WebRouteComponentDto) => {
         console.log("received message: ", message);
         this.electronService.ipcRenderer.send('open-dialow-window', message);

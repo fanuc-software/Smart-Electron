@@ -1,12 +1,13 @@
 .container {
   height: 100%;
+  width: 100% !important;
+  max-width: 1500px;
   display: flex;
   align-items: center;
   justify-content: center;
 
-  background: url(../../../assets/background.jpg) no-repeat center fixed;
-  -webkit-background-size: cover; /* pour anciens Chrome et Safari */
-  background-size: cover; /* version standardisée */
+  //background: url(../../../assets/background.jpg) no-repeat center fixed;
+  // -webkit-background-size: cover; /* pour anciens Chrome et Safari */
 
   .title {
     color: white;
@@ -30,12 +31,12 @@
     height: 768px;
     margin: 0 auto;
   }
-  #home-state{
+  #home-state {
     position: absolute;
     width: 240px;
     height: 20px;
     z-index: 44;
     left: 563px;
-    top: 561px;
+    top: 558px;
   }
 }

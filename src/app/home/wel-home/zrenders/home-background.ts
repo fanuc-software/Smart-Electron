@@ -64,7 +64,7 @@ export class HomeBackground extends BaseAssetsNode implements IZrenderNode {
         linkMenu.on('click', (e) => {
             const webroute = new WebRouteComponentDto();
             webroute.windowName = 'WebRoute';
-            webroute.componentUrl = '/home/control';
+            webroute.componentUrl = '/home/monitor';
             webroute.width = 800;
             webroute.height = 600;
             webroute.positionX = 100;
@@ -75,6 +75,8 @@ export class HomeBackground extends BaseAssetsNode implements IZrenderNode {
         linkHome.on('click', (e) => {
             console.log('Link Home');
             abp.event.trigger(AppConsts.abpEvent.LinkHomeEvent, 'Home');
+            abp.event.trigger(AppConsts.abpEvent.HomePageOnLeaveEvent, 'Home');
+
         });
 
 

@@ -1,5 +1,5 @@
 import { WebRouteComponentDto } from './src/app/shared/services/WebRouteComponentDto';
-import { app, BrowserWindow, screen } from 'electron';
+import { app, BrowserWindow, screen} from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 var electron_1 = require("electron");
@@ -14,18 +14,35 @@ export class DialogWindow {
             if (this.mapWindow.has(message.windowName)) {
                 return;
             }
-            const dialogWindow = new BrowserWindow({
-                width: message.width,
-                height: message.height,
-                frame: false,
-                show: false,
-                x: message.positionX,
-                resizable:false,
-                y: message.positionY,
-                webPreferences: {
-                    nodeIntegration: true
-                }
-            });
+            let dialogWindow: BrowserWindow = null;
+            if (serve) {
+                dialogWindow = new BrowserWindow({
+                    width: message.width,
+                    height: message.height,
+                    frame: true,
+                    show: false,
+                    x: message.positionX,
+                    resizable: true,
+                    y: message.positionY,
+                    webPreferences: {
+                        nodeIntegration: true
+                    }
+                });
+            } else {
+                dialogWindow = new BrowserWindow({
+                    width: message.width,
+                    height: message.height,
+                    frame: false,
+                    show: false,
+                    x: message.positionX,
+                    resizable: false,
+                    y: message.positionY,
+                    webPreferences: {
+                        nodeIntegration: true
+                    }
+                });
+            }
+
             this.mapWindow.set(message.windowName, dialogWindow);
             dialogWindow.once('ready-to-show', () => {
                 dialogWindow.show();
@@ -46,7 +63,7 @@ export class DialogWindow {
             dialogWindow.on('closed', () => {
                 console.log('dia:' + message);
 
-               this.mapWindow.delete(message.windowName);
+                this.mapWindow.delete(message.windowName);
 
             });
             dialogWindow.on('show', () => {

@@ -10,6 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class HomeZrenderComponent implements OnInit {
   mainZrender: any;
+  lineAnimate: any;
   constructor(private titleSet: Title, private routeInfo: ActivatedRoute) {
     const title = this.routeInfo.snapshot.params['name'];
     this.titleSet.setTitle(title);
@@ -32,14 +33,30 @@ export class HomeZrenderComponent implements OnInit {
   }
   start() {
     console.log('start');
+    const point = new zrender.Circle({
+      shape: {
+        cx: 10,
+        cy: 10,
+        r: 4
+      }, style: {
+        fill: 'red'
+      }
+    });
+    this.lineAnimate = point.animate('shape', false);
     this.mainZrender.add(this.getPolyline());
 
+    this.mainZrender.add(point);
+    // this.lineAnimate = this.lineAnimate.when(2000, { cx: 100, cy: 100 });
+    // this.lineAnimate.when(3000, { cx: 30, cy: 30 });
+    this.lineAnimate.start();
   }
 
   getPolyline() {
     const arr = [];
+    let start = 10;
     MainData.forEach(d => {
       arr.push([parseInt(d.X), parseInt(d.Y)]);
+      this.lineAnimate = this.lineAnimate.when(start += 10, { cx: parseInt(d.X), cy: parseInt(d.Y) });
     });
 
 

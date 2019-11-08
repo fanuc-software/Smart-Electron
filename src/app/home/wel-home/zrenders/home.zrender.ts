@@ -15,7 +15,7 @@ export class MainZrenderFactory {
     private homeProgram: HomeProgram = new HomeProgram();
     private homeAlarm: HomeAlarm = new HomeAlarm();
     private mainZrender: any;
-    constructor(mainElement: HTMLElement, private serviceProxy: SignalrServcieProxyService) {
+    constructor(mainElement: HTMLElement) {
         this.mainZrender = zrender.init(mainElement);
 
     }

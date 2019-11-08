@@ -35,10 +35,12 @@ export class HomeComponent extends BaseAssetsNode implements OnInit, OnDestroy {
       }
       this.mainZrender.Refresh(node);
     };
+    this.serviceProxy.initCncSignalr();
+    this.serviceProxy.initCncWebClientSignalr();
   }
 
   ngOnInit() {
-    this.mainZrender = new MainZrenderFactory(document.getElementById('main'), this.serviceProxy);
+    this.mainZrender = new MainZrenderFactory(document.getElementById('main'));
 
     this.mainZrender.build();
     this.loadPath = this.getImageSrc();

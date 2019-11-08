@@ -16,18 +16,35 @@ var DialogWindow = /** @class */ (function () {
             if (_this.mapWindow.has(message.windowName)) {
                 return;
             }
-            var dialogWindow = new electron_2.BrowserWindow({
-                width: message.width,
-                height: message.height,
-                frame: false,
-                show: false,
-                x: message.positionX,
-                resizable: false,
-                y: message.positionY,
-                webPreferences: {
-                    nodeIntegration: true
-                }
-            });
+            var dialogWindow = null;
+            if (serve) {
+                dialogWindow = new electron_2.BrowserWindow({
+                    width: message.width,
+                    height: message.height,
+                    frame: true,
+                    show: false,
+                    x: message.positionX,
+                    resizable: true,
+                    y: message.positionY,
+                    webPreferences: {
+                        nodeIntegration: true
+                    }
+                });
+            }
+            else {
+                dialogWindow = new electron_2.BrowserWindow({
+                    width: message.width,
+                    height: message.height,
+                    frame: false,
+                    show: false,
+                    x: message.positionX,
+                    resizable: false,
+                    y: message.positionY,
+                    webPreferences: {
+                        nodeIntegration: true
+                    }
+                });
+            }
             _this.mapWindow.set(message.windowName, dialogWindow);
             dialogWindow.once('ready-to-show', function () {
                 dialogWindow.show();

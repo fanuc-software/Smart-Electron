@@ -1,0 +1,68 @@
+<div class="row" style="margin-top: 20px;">
+    <div class="col-md-3">
+        <div class="list-group well">
+            <div class="well">
+
+                <ng-template ngFor let-item [ngForOf]="dataNodes">
+
+                    <button *ngIf="item.isActive" type="button" class="btn btn-primary btn-lg btn-block"
+                        (click)="nodeClick(item)">
+                        <span style="font-size: 15px;">{{item.fullNameSpace}}</span>
+
+                        <span class="badge badge-light" style="float:right;margin-top: 5px;"
+                            *ngIf="item.nodes">{{item.nodes.length}}</span>
+                    </button>
+                    <button *ngIf="!item.isActive" type="button" class="btn btn-secondary  btn-lg btn-block"
+                        (click)="nodeClick(item)"> <span style="font-size: 15px;">{{item.fullNameSpace}}</span>
+
+                        <span class="badge badge-light" style="float: right;margin-top: 5px;"
+                            *ngIf="item.nodes">{{item.nodes.length}}</span>
+                    </button>
+
+
+
+                </ng-template>
+            </div>
+
+
+
+
+        </div>
+    </div>
+    <div class="col-md-9" style="max-height: 800px;overflow-y: auto;">
+        <ng-template ngFor let-item [ngForOf]="dataNodes">
+
+            <div style="width: 48%;float: left;margin-left: 1%;" *ngIf="item.isActive">
+                <div class="alert alert-info" role="alert">
+                    <p>
+                        <span class="badge badge-danger" style="font-size: 15px;">{{item.fullNameSpace}}</span>
+                        <strong style="margin-left: 10px;">{{item.time}}</strong>
+                        <button type="button" class="close" (click)="nodeClick(item)">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </p>
+                    <ng-template ngFor let-d [ngForOf]="item.nodes">
+                        <div class="badge badge-info text-wrap"
+                            style="max-width: 100%; margin-left: 5px;  overflow:hidden;">
+                            {{getString(d)}}
+                        </div>
+                    </ng-template>
+
+                </div>
+            </div>
+
+
+
+
+        </ng-template>
+    </div>
+</div>
+
+<div class="row" style="margin-top: 20px;" *ngIf="dataNodes.length==0">
+    <div class="col-md-12">
+        <div class="jumbotron">
+            <h1 style="text-align: center;"> 当前没有数据轮询结果</h1>
+
+        </div>
+    </div>
+</div>

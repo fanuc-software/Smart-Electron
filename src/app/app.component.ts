@@ -12,25 +12,29 @@ import { WebRouteComponentDto } from './shared/services/WebRouteComponentDto';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  connection;
+  myNotification: Notification;
   constructor(public electronService: ElectronService, private translate: TranslateService, private router: Router) {
-    abp.signalr.autoConnect = false;
-
     translate.setDefaultLang('en');
     this.electronService.ipcRenderer.on('NavWebRouter', (event, message: WebRouteComponentDto) => {
       console.log(message.windowName);
       this.router.navigate([message.componentUrl, message.windowName]);
     });
     this.initSignalr();
+    abp.event.on(AppConsts.abpEvent.LinkHomeEvent, (node) => {
+      this.connection.invoke('navHome');
+    });
   }
 
   private initSignalr() {
 
     abp.signalr.startConnection(AppConsts.remoteServiceBaseUrl + '/hubs-routeHub', (connection) => {
+      this.connection = connection;
       connection.on('GetRoute', (message: string) => {
         console.log("received message: ", message);
         if (!message.toLocaleLowerCase().includes('http')) {
           abp.event.trigger(AppConsts.abpEvent.HomePageOnLoadEvent, message);
-       //   this.router.navigateByUrl(message);
+          //   this.router.navigateByUrl(message);
         } else {
           this.router.navigate(['/home/web', message]);
           abp.event.trigger(AppConsts.abpEvent.RefreshUrlEvent, message);
@@ -42,10 +46,28 @@ export class AppComponent {
       });
 
     }).then((connection) => {
-      abp.log.debug('Connected to routeHub server!');
-      abp.event.on(AppConsts.abpEvent.LinkHomeEvent, (node) => {
-        connection.invoke('navHome');
-      });
+
+      if (this.myNotification) {
+        this.myNotification.close();
+        this.myNotification = new Notification('网络通知', {
+          body: '【routeHub】 重新连接成功！'
+        })
+        this.myNotification = null;
+      }
+      connection.connection.onclose = (d) => {
+        this.myNotification = new Notification('网络通知', {
+          body: '【routeHub】 连接中断，正在重新连接...'
+        });
+
+        setTimeout(() => {
+          this.initSignalr();
+        }, 5000)
+      }
+
+    }).catch(error => {
+      setTimeout(() => {
+        this.initSignalr();
+      }, 5000)
     });
 
   }

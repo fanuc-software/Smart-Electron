@@ -8,12 +8,12 @@ import { HomeControlComponent } from './home-control/home-control.component';
 import { HostMonitorComponent } from './host-monitor/host-monitor.component';
 
 const routes: Routes = [
-  { path: 'home', component: HomeComponent },
+  { path: '', component: HomeComponent },
   { path: 'web/:id', component: WebHomeComponent },
   { path: 'zrender/:name', component: HomeZrenderComponent },
   { path: 'control/:name', component: HomeControlComponent },
-  //{ path: 'monitor/:name', component: HostMonitorComponent }
-  { path: '', component: HostMonitorComponent }
+  { path: 'monitor/:name', component: HostMonitorComponent }
+  // { path: '', component: HostMonitorComponent }
 
 
 ];

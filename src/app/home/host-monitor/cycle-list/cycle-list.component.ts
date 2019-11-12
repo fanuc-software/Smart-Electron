@@ -26,10 +26,10 @@ export class CycleListComponent implements OnInit {
         }
         const index = this.cycleNodes.findIndex(d => d.groupName == name);
 
-        if (item.operation == 'Add' && index == -1) {
+        if (item.operation == '0' && index == -1) {
           this.cycleNodes.push(new GroupNode(name, item.operation, item.data));
 
-        } else if(item.operation == 'Remove' ) {
+        } else if(item.operation == '1' ) {
           if (this.cycleNodes[index].isActive) {
             this.cycleDataNodes = [];
           }

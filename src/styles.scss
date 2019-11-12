@@ -1,16 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
-@import '~bootstrap/dist/css/bootstrap.css';
+@import "~bootstrap/dist/css/bootstrap.css";
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
-
+  overflow: hidden;
   height: 100%;
 }
 @font-face {
+  font-family: DINCondensed-Bold;
 
-	font-family:DINCondensed-Bold;
-
-	src: url('./assets/fonts/DINCondensedBold.ttf');
-
+  src: url("./assets/fonts/DINCondensedBold.ttf");
 }

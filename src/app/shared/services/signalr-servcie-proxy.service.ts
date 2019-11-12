@@ -13,41 +13,7 @@ export class SignalrServcieProxyService {
   private cncHub = null;
   private webClientHub = null;
   constructor(private router: Router) {
-    abp.signalr.autoConnect = false;
-
-  }
-
-  public initCncSignalr() {
-    abp.signalr.startConnection(AppConsts.remoteServiceBaseUrl + '/hubs-cncHub', (connection) => {
-      this.cncHub = connection;
-      connection.on('GetCNCData', (message: any) => {
-        abp.event.trigger(AppConsts.abpEvent.GetCNCDataEvent, message);
-      });
-      connection.on('GetReadWriter', (message: any) => {
-        abp.event.trigger(AppConsts.abpEvent.GetReadWriter, message);
-      });
-      connection.on('GetProgram', (message: any) => {
-        abp.event.trigger(AppConsts.abpEvent.GetProgram, message);
-      });
-      connection.on('GetError', (message: string) => {
-        // abp.log.debug("[GetError ]: " + message);
-        abp.event.trigger(AppConsts.abpEvent.GetCncErrorEvent, message);
-
-
-      });
-    }).then((connection) => {
-    });
-
-  }
-  public initCncWebClientSignalr() {
-
-    abp.signalr.startConnection(AppConsts.remoteServiceBaseUrl + '/hubs-cncWebClient', (connection) => {
-      this.webClientHub = connection;
-    }).then((connection) => {
-      abp.log.debug('Connected to cncWebClient server!');
-      abp.event.trigger(AppConsts.abpEvent.WebClientConnectedEvent, "SUCCESS");
-
-    });
+    abp.signalr.autoConnect = true;
     abp.event.on(AppConsts.abpEvent.HomePageOnLoadEvent, (s) => {
       if (this.webClientHub) {
         console.log('pageOnLoad');
@@ -63,6 +29,65 @@ export class SignalrServcieProxyService {
 
       }
     });
+  }
+
+  public initCncSignalr() {
+    abp.signalr.startConnection(AppConsts.remoteServiceBaseUrl + '/hubs-cncHub', (connection) => {
+      this.cncHub = connection;
+      connection.on('GetCNCData', (message: any) => {
+       // console.log(message);
+        abp.event.trigger(AppConsts.abpEvent.GetCNCDataEvent, message.data);
+      });
+      connection.on('GetReadWriter', (message: any) => {
+        abp.event.trigger(AppConsts.abpEvent.GetReadWriter, message);
+      });
+      connection.on('GetProgram', (message: any) => {
+        abp.event.trigger(AppConsts.abpEvent.GetProgram, message);
+      });
+      connection.on('GetError', (message: string) => {
+        // abp.log.debug("[GetError ]: " + message);
+        abp.event.trigger(AppConsts.abpEvent.GetCncErrorEvent, message);
+
+
+      });
+
+    }).then((connection) => {
+      abp.notify.success('The network 【cncHub】 has connected.', 'Connected Success');
+
+      connection.connection.onclose = (d) => {
+        abp.notify.error('The network 【cncHub】 has been disconnected.', 'Network disconnected');
+        setTimeout(() => {
+          this.initCncSignalr();
+        }, 5000)
+      }
+
+    }).catch(error => {
+      setTimeout(() => {
+        this.initCncSignalr();
+      }, 5000)
+    });
+
+  }
+  public initCncWebClientSignalr() {
+
+    abp.signalr.startConnection(AppConsts.remoteServiceBaseUrl + '/hubs-cncWebClient', (connection) => {
+      this.webClientHub = connection;
+    }).then((connection) => {
+      abp.notify.success('The network 【cncWebClient】 has connected.', 'Connected Success');
+      abp.event.trigger(AppConsts.abpEvent.WebClientConnectedEvent, "SUCCESS");
+      connection.connection.onclose = (d) => {
+        abp.notify.error('The network 【cncWebClient】 been disconnected.', 'Network disconnected');
+        setTimeout(() => {
+          this.initCncWebClientSignalr();
+        }, 5000)
+      }
+
+    }).catch(error => {
+      setTimeout(() => {
+        this.initCncWebClientSignalr();
+      }, 5000)
+    });;
+
 
   }
 

@@ -17,9 +17,10 @@ function createWindow() {
     height: 768,
     frame: false,
     center: true,
-    resizable:false,
+    resizable: false,
     // resizable: false,
     // movable: false,
+    useContentSize: true,
     webPreferences: {
       nodeIntegration: true,
       webviewTag: true
@@ -28,17 +29,19 @@ function createWindow() {
   });
   if (serve) {
     win = new BrowserWindow({
-      width: 1400,
+      width: 1600,
       height: 800,
-
+      frame: true,
       center: true,
-
+      resizable: false,
+      useContentSize: true,
       webPreferences: {
         nodeIntegration: true,
         webviewTag: true
       },
 
     });
+
     require('electron-reload')(__dirname, {
       electron: require(`${__dirname}/node_modules/electron`)
     });

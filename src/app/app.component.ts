@@ -27,11 +27,11 @@ export class AppComponent {
   }
 
   private initSignalr() {
-
+    console.log('Init Signalr');
     abp.signalr.startConnection(AppConsts.remoteServiceBaseUrl + '/hubs-routeHub', (connection) => {
       this.connection = connection;
       connection.on('GetRoute', (message: string) => {
-        console.log("received message: ", message);
+        // console.log("received message: ", message);
         if (!message.toLocaleLowerCase().includes('http')) {
           abp.event.trigger(AppConsts.abpEvent.HomePageOnLoadEvent, message);
           //   this.router.navigateByUrl(message);
@@ -41,33 +41,34 @@ export class AppComponent {
         }
       });
       connection.on('GetWebDialogWindow', (message: WebRouteComponentDto) => {
-        console.log("received message: ", message);
+        //  console.log("received message: ", message);
         this.electronService.ipcRenderer.send('open-dialow-window', message);
+
       });
 
     }).then((connection) => {
 
-      if (this.myNotification) {
-        this.myNotification.close();
-        this.myNotification = new Notification('网络通知', {
-          body: '【routeHub】 重新连接成功！'
-        })
-        this.myNotification = null;
-      }
-      connection.connection.onclose = (d) => {
-        this.myNotification = new Notification('网络通知', {
-          body: '【routeHub】 连接中断，正在重新连接...'
-        });
+      // if (this.myNotification) {
+      //   this.myNotification.close();
+      //   this.myNotification = new Notification('网络通知', {
+      //     body: '【routeHub】 重新连接成功！'
+      //   })
+      //   this.myNotification = null;
+      // }
+      // connection.connection.onclose = (d) => {
+      //   this.myNotification = new Notification('网络通知', {
+      //     body: '【routeHub】 连接中断，正在重新连接...'
+      //   });
 
-        setTimeout(() => {
-          this.initSignalr();
-        }, 5000)
-      }
+      //   setTimeout(() => {
+      //     this.initSignalr();
+      //   }, 5000)
+      // }
 
     }).catch(error => {
-      setTimeout(() => {
-        this.initSignalr();
-      }, 5000)
+      // setTimeout(() => {
+      //   this.initSignalr();
+      // }, 5000)
     });
 
   }

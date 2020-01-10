@@ -32,10 +32,11 @@ export class SignalrServcieProxyService {
   }
 
   public initCncSignalr() {
+    console.log('initCncSignalr');
     abp.signalr.startConnection(AppConsts.remoteServiceBaseUrl + '/hubs-cncHub', (connection) => {
       this.cncHub = connection;
       connection.on('GetCNCData', (message: any) => {
-       // console.log(message);
+        // console.log(message);
         abp.event.trigger(AppConsts.abpEvent.GetCNCDataEvent, message.data);
       });
       connection.on('GetReadWriter', (message: any) => {
@@ -54,39 +55,40 @@ export class SignalrServcieProxyService {
     }).then((connection) => {
       abp.notify.success('The network 【cncHub】 has connected.', 'Connected Success');
 
-      connection.connection.onclose = (d) => {
-        abp.notify.error('The network 【cncHub】 has been disconnected.', 'Network disconnected');
-        setTimeout(() => {
-          this.initCncSignalr();
-        }, 5000)
-      }
+      // connection.connection.onclose = (d) => {
+      //   abp.notify.error('The network 【cncHub】 has been disconnected.', 'Network disconnected');
+      //   setTimeout(() => {
+      //     this.initCncSignalr();
+      //   }, 5000)
+      // }
 
     }).catch(error => {
-      setTimeout(() => {
-        this.initCncSignalr();
-      }, 5000)
+      // setTimeout(() => {
+      //   this.initCncSignalr();
+      // }, 5000)
     });
 
   }
   public initCncWebClientSignalr() {
+    console.log('initCncWebClientSignalr');
 
     abp.signalr.startConnection(AppConsts.remoteServiceBaseUrl + '/hubs-cncWebClient', (connection) => {
       this.webClientHub = connection;
     }).then((connection) => {
       abp.notify.success('The network 【cncWebClient】 has connected.', 'Connected Success');
       abp.event.trigger(AppConsts.abpEvent.WebClientConnectedEvent, "SUCCESS");
-      connection.connection.onclose = (d) => {
-        abp.notify.error('The network 【cncWebClient】 been disconnected.', 'Network disconnected');
-        setTimeout(() => {
-          this.initCncWebClientSignalr();
-        }, 5000)
-      }
+      // connection.connection.onclose = (d) => {
+      //   abp.notify.error('The network 【cncWebClient】 been disconnected.', 'Network disconnected');
+      //   setTimeout(() => {
+      //     this.initCncWebClientSignalr();
+      //   }, 5000)
+      // }
 
     }).catch(error => {
-      setTimeout(() => {
-        this.initCncWebClientSignalr();
-      }, 5000)
-    });;
+      // setTimeout(() => {
+      //   this.initCncWebClientSignalr();
+      // }, 5000)
+    });
 
 
   }

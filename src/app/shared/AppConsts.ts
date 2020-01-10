@@ -1,7 +1,7 @@
 export class AppConsts {
 
-    static remoteServiceBaseUrl: string = "http://192.168.21.175:21021";
-    // static remoteServiceBaseUrl: string = "http://localhost:21021";
+   // static remoteServiceBaseUrl: string = "http://192.168.21.175:21021";
+     static remoteServiceBaseUrl: string = "http://123.207.159.105:21021";
     // static remoteServiceBaseUrl: string = "http://localhost/mmk";
 
     static appBaseUrl: string = "http://localhost:4200";
@@ -17,6 +17,5 @@ export class AppConsts {
         GetCncErrorEvent: 'GetCncErrorEvent',
         GetProgram:"GetProgram",
         GetReadWriter:"GetReadWriter"
-
     }
 }

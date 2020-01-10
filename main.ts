@@ -30,7 +30,7 @@ function createWindow() {
   if (serve) {
     win = new BrowserWindow({
       width: 1600,
-      height: 800,
+      height: 900,
       frame: true,
       center: true,
       resizable: false,

@@ -5,17 +5,18 @@ import { HomeModal } from "./home-modal";
 import { HomeProgram } from "./home-program";
 import { HomeAlarm } from "./home-alarm";
 import { SignalrServcieProxyService } from "../../../shared/services/signalr-servcie-proxy.service";
+import { HttpClient } from "@angular/common/http";
 
 
 export class MainZrenderFactory {
-    private background: HomeBackground = new HomeBackground();
+    private background: HomeBackground = new HomeBackground(this.http);
     private homeSpeed: HomeSpeed = new HomeSpeed();
     private homePositrion: HomePosition = new HomePosition();
     private homeModal: HomeModal = new HomeModal();
     private homeProgram: HomeProgram = new HomeProgram();
     private homeAlarm: HomeAlarm = new HomeAlarm();
     private mainZrender: any;
-    constructor(mainElement: HTMLElement) {
+    constructor(mainElement: HTMLElement, private http: HttpClient) {
         this.mainZrender = zrender.init(mainElement);
 
     }

@@ -4,6 +4,7 @@ import { BaseAssetsNode } from './zrenders/zrender-Factory';
 import { SignalrServcieProxyService } from '../../shared/services/signalr-servcie-proxy.service';
 import { AppConsts } from '../../shared/AppConsts';
 import { Title } from "@angular/platform-browser";
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
@@ -18,7 +19,7 @@ export class HomeComponent extends BaseAssetsNode implements OnInit, OnDestroy {
   loadPath = '';
   webClientConnectEvent;
   cncDataEvent;
-  constructor(private serviceProxy: SignalrServcieProxyService, private titleSet: Title) {
+  constructor(private serviceProxy: SignalrServcieProxyService, private titleSet: Title, private http: HttpClient) {
     super();
     this.webClientConnectEvent = (t) => {
       abp.event.trigger(AppConsts.abpEvent.HomePageOnLoadEvent);
@@ -40,7 +41,7 @@ export class HomeComponent extends BaseAssetsNode implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.mainZrender = new MainZrenderFactory(document.getElementById('main'));
+    this.mainZrender = new MainZrenderFactory(document.getElementById('main'), this.http);
 
     this.mainZrender.build();
     this.loadPath = this.getImageSrc();

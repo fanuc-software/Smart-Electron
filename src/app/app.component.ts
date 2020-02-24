@@ -18,7 +18,13 @@ export class AppComponent {
     translate.setDefaultLang('en');
     this.electronService.ipcRenderer.on('NavWebRouter', (event, message: WebRouteComponentDto) => {
       console.log(message.windowName);
-      this.router.navigate([message.componentUrl, message.windowName]);
+      if (message.windowName == 'WebRoute') {
+        this.router.navigate([message.componentUrl]);
+
+      } else {
+        this.router.navigate([message.componentUrl, message.windowName]);
+
+      }
     });
     this.initSignalr();
     abp.event.on(AppConsts.abpEvent.LinkHomeEvent, (node) => {

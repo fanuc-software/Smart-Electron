@@ -12,6 +12,7 @@ import { CycleListComponent } from './host-monitor/cycle-list/cycle-list.compone
 import { CycleResultComponent } from './host-monitor/cycle-result/cycle-result.component';
 import { ReadWriterComponent } from './host-monitor/read-writer/read-writer.component';
 import { ProgramResovleComponent } from './host-monitor/program-resovle/program-resovle.component';
+import { HomeAlarmComponent } from './home-alarm/home-alarm.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { ProgramResovleComponent } from './host-monitor/program-resovle/program-
     CycleListComponent,
     CycleResultComponent,
     ReadWriterComponent,
-    ProgramResovleComponent
+    ProgramResovleComponent,
+    HomeAlarmComponent
   ],
   imports: [CommonModule, SharedModule, HomeRoutingModule, TabsModule.forRoot()]
 })

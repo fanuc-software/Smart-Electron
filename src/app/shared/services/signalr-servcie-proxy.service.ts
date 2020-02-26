@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppConsts } from '../AppConsts';
+import { ErrorMataModel } from './cnc-alarm';
 const { ipcRenderer } = require('electron')
 
 @Injectable({
@@ -33,7 +34,7 @@ export class SignalrServcieProxyService {
 
   public initCncSignalr() {
     console.log('initCncSignalr');
-    abp.signalr.startConnection(AppConsts.remoteServiceBaseUrl + '/hubs-cncHub', (connection) => {
+    abp.signalr.startConnection(AppConsts.remoteServiceBaseUrl + '/hubs-cncHub?webHistory=true', (connection) => {
       this.cncHub = connection;
       connection.on('GetCNCData', (message: any) => {
         // console.log(message);
@@ -45,7 +46,11 @@ export class SignalrServcieProxyService {
       connection.on('GetProgram', (message: any) => {
         abp.event.trigger(AppConsts.abpEvent.GetProgram, message);
       });
-      connection.on('GetError', (message: string) => {
+      connection.on('GetHubErrorMata', (message: ErrorMataModel[]) => {
+        console.log(message);
+        abp.event.trigger(AppConsts.abpEvent.GetHubErrorMata, message);
+      });
+      connection.on('GetError', (message: ErrorMataModel) => {
         // abp.log.debug("[GetError ]: " + message);
         abp.event.trigger(AppConsts.abpEvent.GetCncErrorEvent, message);
 

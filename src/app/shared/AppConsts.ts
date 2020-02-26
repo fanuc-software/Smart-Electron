@@ -16,6 +16,7 @@ export class AppConsts {
         LinkHomeEvent: 'NavHomeEvent',
         GetCncErrorEvent: 'GetCncErrorEvent',
         GetProgram:"GetProgram",
-        GetReadWriter:"GetReadWriter"
+        GetReadWriter:"GetReadWriter",
+        GetHubErrorMata:"GetHubErrorMata"
     }
 }

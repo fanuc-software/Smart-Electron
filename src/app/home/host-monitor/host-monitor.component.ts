@@ -5,6 +5,7 @@ import { SignalrServcieProxyService } from '../../shared/services/signalr-servci
 import { CycleResultComponent } from './cycle-result/cycle-result.component';
 import { ReadWriterComponent } from './read-writer/read-writer.component';
 import { ProgramResovleComponent } from './program-resovle/program-resovle.component';
+import { ErrorMataModel } from '../../shared/services/cnc-alarm';
 
 @Component({
   selector: 'app-host-monitor',
@@ -24,11 +25,11 @@ export class HostMonitorComponent implements OnInit, OnDestroy {
   getCncReadWriter: any;
   getCncProgram: any;
   constructor(private serviceProxy: SignalrServcieProxyService) {
-    this.getCncError = (s) => {
+    this.getCncError = (s: ErrorMataModel) => {
       if (this.errNodes.length > 20) {
         this.errNodes = [];
       }
-      this.errNodes.unshift({ time: this.getCurrentTime(), text: s });
+      this.errNodes.unshift({ time: this.getCurrentTime(), text: s.message });
     };
     this.getCncData = (d) => {
       this.cycleResult.setData(d);

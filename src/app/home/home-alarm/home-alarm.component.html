@@ -1,35 +1,51 @@
-<p>home-alarm works!</p>
-<div class="container-fluid">
-    <div class="row">
+<div class="main">
+    <div class="container-fluid" style="padding-top: 20px;">
+        <div class="row" >
 
 
-        <ng-template ngFor let-item [ngForOf]="nodes">
-            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                <div class="info-box-2 " [ngClass]="item.alarmModel.style.bgColor">
+            <ng-template ngFor let-item [ngForOf]="nodes">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box-2 " [ngClass]="item.alarmModel.style.bgColor">
+                        <div class="icon">
+
+                            <i class="material-icons">{{item.alarmModel.style.icon}}</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">
+                                <span>{{item.handler}}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span><strong>{{item.updateTime}}</strong></span>
+
+
+                            </div>
+                            <div style="clear: both;" class="number count-to">{{item.message}}</div>
+                        </div>
+                    </div>
+                </div>
+
+            </ng-template>
+            <!-- <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                <div class="info-box-2 bg-deep-purple">
                     <div class="icon">
-
-                        <i class="material-icons">{{item.alarmModel.style.icon}}</i>
+                        <i class="material-icons">favorite</i>
                     </div>
                     <div class="content">
-                        <div class="text">{{item.handler}}
-                            <span style="float: right;font: outline;"><strong>{{item.updateTime}}</strong></span>
-                        </div>
-                        <div style="clear: both;" class="number count-to">{{item.message}}</div>
+                        <div class="text">LIKES</div>
+                        <div class="number count-to" data-from="0" data-to="1432" data-speed="1500" data-fresh-interval="20">1432</div>
                     </div>
                 </div>
+            </div> -->
+        </div>
+        <div class="row" *ngIf="nodes.length==0" style="width: 100%; text-align: center; margin-top: 200px;">
+            <div style="margin:0 auto">
+                <h1 style="color: white;">目前暂无报警！</h1>
             </div>
+        </div>
 
-        </ng-template>
-        <!-- <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-            <div class="info-box-2 bg-deep-purple">
-                <div class="icon">
-                    <i class="material-icons">favorite</i>
-                </div>
-                <div class="content">
-                    <div class="text">LIKES</div>
-                    <div class="number count-to" data-from="0" data-to="1432" data-speed="1500" data-fresh-interval="20">1432</div>
-                </div>
-            </div>
-        </div> -->
     </div>
+    <footer id="divFooter" class="footer navbar-fixed-bottom ">
+
+        <div class="container">
+            <button type="button" class="btn btn-outline-danger " style="width: 200px;" (click)="close()">关闭</button>
+        </div>
+
+    </footer>
 </div>

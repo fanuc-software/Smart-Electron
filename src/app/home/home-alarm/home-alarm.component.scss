@@ -35,6 +35,15 @@
     font-size: 22px;
     margin-top: -4px;
     color: #555;
+    white-space:nowrap;          /*不换行*/
+    text-overflow: ellipsis;         /*超出的显示省略号*/
+    overflow:hidden;                  /*超出部分隐藏*/
+    word-wrap:normal;   
+
+}
+.main{
+    background: #222222;
+    height: 100%;
 }
 .bg-purple {
     background-color: #9C27B0 !important;
@@ -52,3 +61,13 @@
     background-color: #3F51B5 !important;
     color: #fff;
 }
+
+#divFooter {
+    position:fixed;
+    margin-right:98px;
+    padding-right:15px;
+    bottom:20px;
+    margin-bottom:0;
+    width:100%;
+    text-align:center;
+    }

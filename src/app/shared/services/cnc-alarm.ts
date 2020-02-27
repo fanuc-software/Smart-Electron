@@ -13,7 +13,7 @@ export class CNCAlarmModel {
     public handlerType: AlarmHandlerEnum;
     public style: HandlerTypeStyle;
     constructor() {
-        this.handlerType = AlarmHandlerEnum.alarm;
+        this.handlerType = AlarmHandlerEnum.Alarm;
         this.style = new HandlerTypeStyle('bg-red', 'bookmark');
     }
 }
@@ -26,18 +26,19 @@ export class HandlerTypeStyle {
     }
 }
 export enum AlarmHandlerEnum {
-    alarm,
-    cycleTime,
-    feedrate,
-    macro,
-    notice,
-    paraAssistGas,
-    paraCommon,
-    pmc,
-    paraReferencePosition,
-    position,
-    programBlock,
-    programName,
-    programStr,
-    workpartNum
+    Connect,
+    Alarm,
+    CycleTime,
+    Feedrate,
+    Macro,
+    Notice,
+    ParaAssistGas,
+    ParaCommon,
+    Pmc,
+    ParaReferencePosition,
+    Position,
+    ProgramBlock,
+    ProgramName,
+    ProgramStr,
+    WorkpartNum
 }

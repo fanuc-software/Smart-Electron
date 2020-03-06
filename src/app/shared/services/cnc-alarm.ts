@@ -14,7 +14,7 @@ export class CNCAlarmModel {
     public style: HandlerTypeStyle;
     constructor() {
         this.handlerType = AlarmHandlerEnum.Alarm;
-        this.style = new HandlerTypeStyle('bg-red', 'bookmark');
+        this.style = new HandlerTypeStyle('bg-red', 'error_outline');
     }
 }
 

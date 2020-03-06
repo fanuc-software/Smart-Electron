@@ -30,7 +30,10 @@ export class HomeAlarmComponent implements OnInit, OnDestroy {
           d.alarmModel.style = this.mapStyle.get(dd);
 
         }
-        this.nodes.push(d);
+        if (this.nodes.length < 12) {
+          this.nodes.push(d);
+
+        }
 
       });
     };
@@ -46,11 +49,14 @@ export class HomeAlarmComponent implements OnInit, OnDestroy {
           node.alarmModel.style = this.mapStyle.get(dd);
 
         }
-        this.nodes.unshift(node);
+        if (this.nodes.length < 12) {
+          this.nodes.unshift(node);
+        }
       }
     }
   }
   close() {
+    console.log('alarm is close');
     abp.event.trigger(AppConsts.abpEvent.LinkHomeEvent, 'Home');
 
   }
@@ -70,6 +76,32 @@ export class HomeAlarmComponent implements OnInit, OnDestroy {
       arr.forEach(d => this.nodes.splice(d, 1));
 
     }, 5000);
+    // const mata = new ErrorMataModel();
+    // mata.handler = "AlarmHandler";
+    // mata.message = "读取程序号出错读取程序号出错读取程序号出错读取程序号出错读取程序号出错读取程序号出错读取程序号出错读取程序号出错读取程序号出错读取程序号出错";
+    // mata.updateTime = '2020-03-03 03:00:12';
+    // mata.alarmModel = new CNCAlarmModel();
+
+
+    // const mata2 = new ErrorMataModel();
+    // mata2.handler = "CycleTime";
+    // mata2.message = "读取程序号出错";
+    // mata2.updateTime = '2020-03-03 03:00:12';
+    // mata2.alarmModel = new CNCAlarmModel();
+    // mata2.alarmModel.style=new HandlerTypeStyle('bg-indigo', 'forum'); 
+    // this.nodes.push(mata);
+    // this.nodes.push(mata2);
+
+    // this.nodes.push(mata);
+    // this.nodes.push(mata);
+    // this.nodes.push(mata);
+
+    // this.nodes.push(mata);
+    // this.nodes.push(mata);
+    // this.nodes.push(mata);
+    // this.nodes.push(mata);
+
+    // this.nodes.push(mata);
   }
   ngOnDestroy(): void {
     abp.event.off(AppConsts.abpEvent.GetHubErrorMata, this.GetHubErrorMata);
@@ -77,20 +109,20 @@ export class HomeAlarmComponent implements OnInit, OnDestroy {
     clearInterval(this.interCallBack);
   }
   initStyle() {
-    this.mapStyle.set(AlarmHandlerEnum.Alarm, new HandlerTypeStyle('bg-red', 'bookmark'));
-    this.mapStyle.set(AlarmHandlerEnum.CycleTime, new HandlerTypeStyle('bg-purple', 'favorite'));
-    this.mapStyle.set(AlarmHandlerEnum.Feedrate, new HandlerTypeStyle('bg-red', 'bookmark'));
-    this.mapStyle.set(AlarmHandlerEnum.Macro, new HandlerTypeStyle('bg-red', 'face'));
-    this.mapStyle.set(AlarmHandlerEnum.Notice, new HandlerTypeStyle('bg-deep-purple', 'bookmark'));
-    this.mapStyle.set(AlarmHandlerEnum.ParaAssistGas, new HandlerTypeStyle('bg-red', 'face'));
-    this.mapStyle.set(AlarmHandlerEnum.ParaCommon, new HandlerTypeStyle('bg-red', 'bookmark'));
-    this.mapStyle.set(AlarmHandlerEnum.ParaReferencePosition, new HandlerTypeStyle('bg-red', 'favorite'));
-    this.mapStyle.set(AlarmHandlerEnum.Pmc, new HandlerTypeStyle('bg-indigo', 'face'));
-    this.mapStyle.set(AlarmHandlerEnum.Position, new HandlerTypeStyle('bg-red', 'favorite'));
-    this.mapStyle.set(AlarmHandlerEnum.ProgramBlock, new HandlerTypeStyle('bg-indigo', 'bookmark'));
-    this.mapStyle.set(AlarmHandlerEnum.ProgramName, new HandlerTypeStyle('bg-red', 'face'));
-    this.mapStyle.set(AlarmHandlerEnum.ProgramStr, new HandlerTypeStyle('bg-indigo', 'bookmark'));
-    this.mapStyle.set(AlarmHandlerEnum.WorkpartNum, new HandlerTypeStyle('bg-red', 'bookmark'));
+    this.mapStyle.set(AlarmHandlerEnum.Alarm, new HandlerTypeStyle('bg-red', 'error_outline'));
+    this.mapStyle.set(AlarmHandlerEnum.CycleTime, new HandlerTypeStyle('bg-purple', 'note'));
+    this.mapStyle.set(AlarmHandlerEnum.Feedrate, new HandlerTypeStyle('bg-indigo', 'forum'));
+    this.mapStyle.set(AlarmHandlerEnum.Macro, new HandlerTypeStyle('bg-red', 'error_outline'));
+    this.mapStyle.set(AlarmHandlerEnum.Notice, new HandlerTypeStyle('bg-purple', 'note'));
+    this.mapStyle.set(AlarmHandlerEnum.ParaAssistGas, new HandlerTypeStyle('bg-red', 'error_outline'));
+    this.mapStyle.set(AlarmHandlerEnum.ParaCommon, new HandlerTypeStyle('bg-indigo', 'forum'));
+    this.mapStyle.set(AlarmHandlerEnum.ParaReferencePosition, new HandlerTypeStyle('bg-red', 'error_outline'));
+    this.mapStyle.set(AlarmHandlerEnum.Pmc, new HandlerTypeStyle('bg-indigo', 'forum'));
+    this.mapStyle.set(AlarmHandlerEnum.Position, new HandlerTypeStyle('bg-red', 'error_outline'));
+    this.mapStyle.set(AlarmHandlerEnum.ProgramBlock, new HandlerTypeStyle('bg-indigo', 'forum'));
+    this.mapStyle.set(AlarmHandlerEnum.ProgramName, new HandlerTypeStyle('bg-purple', 'note'));
+    this.mapStyle.set(AlarmHandlerEnum.ProgramStr, new HandlerTypeStyle('bg-purple', 'note'));
+    this.mapStyle.set(AlarmHandlerEnum.WorkpartNum, new HandlerTypeStyle('bg-red', 'error_outline'));
 
   }
 }

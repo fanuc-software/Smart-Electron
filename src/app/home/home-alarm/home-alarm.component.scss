@@ -1,73 +1,125 @@
 .info-box-2 {
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    height: 80px;
-    display: flex;
-    cursor: default;
-    background-color: #fff;
-    position: relative;
-    overflow: hidden;
-    margin-bottom: 30px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  height: 80px;
+  display: flex;
+  cursor: default;
+  background-color: #fff;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 30px;
 }
 .info-box-2 .icon {
-    display: inline-block;
-    text-align: center;
-    width: 80px;
+  display: inline-block;
+  text-align: center;
+  width: 80px;
 }
 .info-box-2 .icon i {
-    color: #fff;
-    font-size: 50px;
-    line-height: 80px;
+  color: #fff;
+  font-size: 50px;
+  line-height: 80px;
 }
 .info-box-2 .content {
-    display: inline-block;
-    padding: 7px 5px;
+  display: inline-block;
+  padding: 7px 5px;
 }
 .info-box-2 .content .text {
-    font-size: 13px;
-    margin-top: 6px;
-    color: #555;
+  font-size: 13px;
+  margin-top: 6px;
+  color: #555;
 }
- .content .text, .number {
-    color: #fff !important;
+.content .text,
+.number {
+  color: #fff !important;
+}
+
+.alarm-card {
+  width: 318px;
+  height: 153px;
+  float: left;
+  margin-left: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+.context-left {
+  width: 55px;
+  height: 153px;
+  margin-top: 2px;
+  border: 0;
+  background-color: wheat;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  z-index: 11;
+  position: absolute;
+}
+.context-left .icon {
+  color: white;
+  padding-top: 62px;
+}
+.context-right {
+  position: absolute;
+  left: 51px;
+  width: 261px;
+  height: 161px;
+  z-index: 10;
+  background-image: url("assets/images/alarm-card-bg.png") !important;
+  text-align: left;
+  padding: 8px;
+}
+.handler-time {
+  font-family: "DINCondensed-Bold";
+  font-size: 20px;
+}
+.handler-text {
+  height: 87px;
+  overflow: hidden;
+  line-height: 29px;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  display: -webkit-box;
+  font-size: 18px;
+  -webkit-line-clamp: 3;
+
+  -webkit-box-orient: vertical;
 }
 .info-box-2 .content .number {
-    font-weight: normal;
-    font-size: 22px;
-    margin-top: -4px;
-    color: #555;
-    white-space:nowrap;          /*不换行*/
-    text-overflow: ellipsis;         /*超出的显示省略号*/
-    overflow:hidden;                  /*超出部分隐藏*/
-    word-wrap:normal;   
-
+  font-weight: normal;
+  font-size: 22px;
+  margin-top: -4px;
+  color: #555;
+  white-space: nowrap; /*不换行*/
+  text-overflow: ellipsis; /*超出的显示省略号*/
+  overflow: hidden; /*超出部分隐藏*/
+  word-wrap: normal;
 }
-.main{
-    background: #222222;
-    height: 100%;
+.main {
+  background-image: url("assets/images/alarm-bg.png");
+  height: 100%;
+  width: 1320px;
+  margin: 0 auto;
+}
+.main-body {
+  background-image: url("assets/images/alarm-bg.png");
+  text-align: center;
+  width: 100%;
+  height: 100%;
+}
+#divFooter {
+  position: fixed;
+  margin-right: 98px;
+  padding-right: 15px;
+  bottom: 20px;
+  margin-bottom: 0;
+  width: 1300px;
+  text-align: center;
 }
 .bg-purple {
-    background-color: #9C27B0 !important;
-    color: #fff;
-}
-.bg-deep-purple {
-    background-color: #673AB7 !important;
-    color: #fff;
-}
-.bg-red {
-    background-color: #F44336 !important;
-    color: #fff;
-}
-.bg-indigo {
-    background-color: #3F51B5 !important;
-    color: #fff;
+  background-color: #9b28b0 !important;
 }
 
-#divFooter {
-    position:fixed;
-    margin-right:98px;
-    padding-right:15px;
-    bottom:20px;
-    margin-bottom:0;
-    width:100%;
-    text-align:center;
-    }
+.bg-red {
+  background-color: #e2574b !important;
+}
+.bg-indigo {
+  background-color: #3f51b5 !important;
+}

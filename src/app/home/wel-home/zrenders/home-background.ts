@@ -82,12 +82,12 @@ export class HomeBackground extends BaseAssetsNode implements IZrenderNode {
             }).subscribe(d => { console.log(d); });
 
         })
-        linkHome.on('click', (e) => {
-            console.log('Link Home');
-            abp.event.trigger(AppConsts.abpEvent.LinkHomeEvent, 'Home');
-            abp.event.trigger(AppConsts.abpEvent.HomePageOnLeaveEvent, 'Home');
+        // linkHome.on('click', (e) => {
+        //     console.log('Link Home');
+        //     abp.event.trigger(AppConsts.abpEvent.LinkHomeEvent, 'Home');
+        //     abp.event.trigger(AppConsts.abpEvent.HomePageOnLeaveEvent, 'Home');
 
-        });
+        // });
 
 
         this.MainElementNodes.push(background);

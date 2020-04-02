@@ -16,8 +16,8 @@ export class HomeAlarmComponent implements OnInit, OnDestroy {
   nodes: ErrorMataModel[] = [];
   interCallBack: any;
   mapStyle: Map<AlarmHandlerEnum, HandlerTypeStyle> = new Map<AlarmHandlerEnum, HandlerTypeStyle>();
-
-  constructor(private serviceProxy: SignalrServcieProxyService) {
+  cncHub;
+  constructor() {
 
     this.initStyle();
     this.GetHubErrorMata = (node: ErrorMataModel[]) => {
@@ -61,9 +61,7 @@ export class HomeAlarmComponent implements OnInit, OnDestroy {
 
   }
   ngOnInit() {
-    this.serviceProxy.initCncSignalr();
-    abp.event.on(AppConsts.abpEvent.GetHubErrorMata, this.GetHubErrorMata);
-    abp.event.on(AppConsts.abpEvent.GetCncErrorEvent, this.GetCncErrorEvent);
+
     this.interCallBack = setInterval(() => {
       let arr = [];
       for (let index = 0; index < this.nodes.length; index++) {
@@ -76,36 +74,27 @@ export class HomeAlarmComponent implements OnInit, OnDestroy {
       arr.forEach(d => this.nodes.splice(d, 1));
 
     }, 5000);
-    // const mata = new ErrorMataModel();
-    // mata.handler = "AlarmHandler";
-    // mata.message = "读取程序号出错读取程序号出错读取程序号出错读取程序号出错读取程序号出错读取程序号出错读取程序号出错读取程序号出错读取程序号出错读取程序号出错";
-    // mata.updateTime = '2020-03-03 03:00:12';
-    // mata.alarmModel = new CNCAlarmModel();
 
+  }
 
-    // const mata2 = new ErrorMataModel();
-    // mata2.handler = "CycleTime";
-    // mata2.message = "读取程序号出错";
-    // mata2.updateTime = '2020-03-03 03:00:12';
-    // mata2.alarmModel = new CNCAlarmModel();
-    // mata2.alarmModel.style=new HandlerTypeStyle('bg-indigo', 'forum'); 
-    // this.nodes.push(mata);
-    // this.nodes.push(mata2);
+  initSignalr() {
+    abp.signalr.startConnection(AppConsts.remoteServiceBaseUrl + '/hubs-cncHub?webHistory=true', (connection) => {
+      this.cncHub = connection;
 
-    // this.nodes.push(mata);
-    // this.nodes.push(mata);
-    // this.nodes.push(mata);
+      connection.on('GetHubErrorMata', (message: ErrorMataModel[]) => {
+        this.GetCncErrorEvent(message);
+      });
+      connection.on('GetError', (message: ErrorMataModel) => {
+        this.GetCncErrorEvent(message);
 
-    // this.nodes.push(mata);
-    // this.nodes.push(mata);
-    // this.nodes.push(mata);
-    // this.nodes.push(mata);
+      });
 
-    // this.nodes.push(mata);
+    });
   }
   ngOnDestroy(): void {
-    abp.event.off(AppConsts.abpEvent.GetHubErrorMata, this.GetHubErrorMata);
-    abp.event.off(AppConsts.abpEvent.GetCncErrorEvent, this.GetCncErrorEvent);
+    if (this.cncHub) {
+      this.cncHub.stop();
+    }
     clearInterval(this.interCallBack);
   }
   initStyle() {

@@ -10,28 +10,20 @@ const { ipcRenderer } = require('electron')
 
 })
 export class SignalrServcieProxyService {
-  private chatHub = null;
   private cncHub = null;
   private webClientHub = null;
-  constructor(private router: Router) {
+  constructor() {
     abp.signalr.autoConnect = true;
-    abp.event.on(AppConsts.abpEvent.HomePageOnLoadEvent, (s) => {
-      if (this.webClientHub) {
-        console.log('pageOnLoad');
-        this.webClientHub.invoke('pageOnLoad');
-
-      }
-    });
-    abp.event.on(AppConsts.abpEvent.HomePageOnLeaveEvent, (s) => {
-      if (this.webClientHub) {
-        console.log('pageOnLeave');
-
-        this.webClientHub.invoke('pageOnLeave');
-
-      }
-    });
   }
 
+  public stop() {
+    if (this.webClientHub) {
+      this.webClientHub.stop();
+    }
+    if (this.cncHub) {
+      this.cncHub.stop();
+    }
+  }
   public initCncSignalr() {
     console.log('initCncSignalr');
     abp.signalr.startConnection(AppConsts.remoteServiceBaseUrl + '/hubs-cncHub?webHistory=true', (connection) => {
@@ -58,7 +50,6 @@ export class SignalrServcieProxyService {
       });
 
     }).then((connection) => {
-      abp.notify.success('The network 【cncHub】 has connected.', 'Connected Success');
 
       // connection.connection.onclose = (d) => {
       //   abp.notify.error('The network 【cncHub】 has been disconnected.', 'Network disconnected');
@@ -80,8 +71,6 @@ export class SignalrServcieProxyService {
     abp.signalr.startConnection(AppConsts.remoteServiceBaseUrl + '/hubs-cncWebClient', (connection) => {
       this.webClientHub = connection;
     }).then((connection) => {
-      abp.notify.success('The network 【cncWebClient】 has connected.', 'Connected Success');
-      abp.event.trigger(AppConsts.abpEvent.WebClientConnectedEvent, "SUCCESS");
       // connection.connection.onclose = (d) => {
       //   abp.notify.error('The network 【cncWebClient】 been disconnected.', 'Network disconnected');
       //   setTimeout(() => {

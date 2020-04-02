@@ -42,7 +42,7 @@ export class HomeBackground extends BaseAssetsNode implements IZrenderNode {
                 x: 0,
                 y: 724,
 
-                text: '进入首页',
+                text: '',
                 fontSize: 20,
                 fontWeight: 1,
                 textFill: 'white',
@@ -55,7 +55,7 @@ export class HomeBackground extends BaseAssetsNode implements IZrenderNode {
             style: {
                 x: 1200,
                 y: 740,
-                text: '我的菜单',
+                text: '',
                 fontSize: 20,
                 fontWeight: 1,
                 textFill: 'white',
@@ -63,25 +63,25 @@ export class HomeBackground extends BaseAssetsNode implements IZrenderNode {
             }
         });
 
-        linkMenu.on('click', (e) => {
-            const webroute = new WebRouteComponentDto();
-            webroute.windowName = 'WebRoute';
-            webroute.componentUrl = '/home/alarm';
-            webroute.width = 1366;
-            webroute.height = 768;
-            webroute.positionX = 0;
-            webroute.positionY = 0;
-            ipcRenderer.send('open-dialow-window', webroute);
-            // this.httpClient.post(AppConsts.remoteServiceBaseUrl + '/api/services/app/WebRoute/NavigateWPFDialog', {
-            //     windowName: "WPFDialogWindow",
-            //     width: 0,
-            //     height: 0,
-            //     positionX: 0,
-            //     positionY: 0,
-            //     componentUrl: "WPFDialogWindow"
-            // }).subscribe(d => { console.log(d); });
+        // linkMenu.on('click', (e) => {
+        //     const webroute = new WebRouteComponentDto();
+        //     webroute.windowName = 'WebRoute';
+        //     webroute.componentUrl = '/home/alarm';
+        //     webroute.width = 1366;
+        //     webroute.height = 768;
+        //     webroute.positionX = 0;
+        //     webroute.positionY = 0;
+        //     ipcRenderer.send('open-dialow-window', webroute);
+        //     // this.httpClient.post(AppConsts.remoteServiceBaseUrl + '/api/services/app/WebRoute/NavigateWPFDialog', {
+        //     //     windowName: "WPFDialogWindow",
+        //     //     width: 0,
+        //     //     height: 0,
+        //     //     positionX: 0,
+        //     //     positionY: 0,
+        //     //     componentUrl: "WPFDialogWindow"
+        //     // }).subscribe(d => { console.log(d); });
 
-        })
+        // })
         // linkHome.on('click', (e) => {
         //     console.log('Link Home');
         //     abp.event.trigger(AppConsts.abpEvent.LinkHomeEvent, 'Home');

@@ -7,37 +7,33 @@ export class HomeAlarm implements IZrenderNode {
     private downNode: any;
     constructor() {
 
-        let upProgress = 10;
+        let upProgress = 0;
 
         this.upNode = new AlarmZrenderNode({ x: 280, y: 163 }, { x: 9.4, y: 64.4 }, { x: 4.4, y: 78.6 }, { x: 50, y: 20 }, { x: 59, y: 38 }, { width: 75, height: 99 }, { width: 52, height: 70 }, 'up', upProgress);
-      
-        let middleProgress = 10;
+
+        let middleProgress = 0;
 
         this.middleNode = new AlarmZrenderNode({ x: 260, y: 240 }, { x: 19.5, y: 62.8 }, { x: 19.5, y: 76.5 }, { x: 65, y: 38 }, { x: 75, y: 52 }, { width: 48, height: 92 }, { width: 24, height: 67 }, 'middle', middleProgress);
-        setInterval(() => {
 
-            this.upNode.updateProgress(this.getRandom(10, 30));
 
-            this.middleNode.updateProgress(this.getRandom(10, 30));
-            this.downNode.updateProgress(this.getRandom(30, 60));
-
-        }, 1000);
-
-        let downProgress = 10;
+        let downProgress = 0;
 
         this.downNode = new AlarmZrenderNode({ x: 260, y: 310 }, { x: 24.5, y: 72 }, { x: 29.5, y: 86.5 }, { x: 65, y: 55 }, { x: 78, y: 69 }, { width: 74, height: 94 }, { width: 52, height: 70 }, 'down', downProgress);
-       
+
 
         this.MainElementNodes.push(this.upNode.mainZrender);
         this.MainElementNodes.push(this.middleNode.mainZrender);
         this.MainElementNodes.push(this.downNode.mainZrender);
     }
-    private getRandom(min: number, max: number) {
-        let val = Math.random() * 100;
-        while (!(val >= min && val < max)) {
-            val = Math.random() * 100;
+    private getRandom(min: number) {
+        let res = Math.round(min / 10) * 10;
+        if (res < 0) {
+            res = 0;
         }
-        return Math.round(val / 10) * 10;
+        if (res > 100) {
+            res = 100;
+        }
+        return res;
     }
     public refresh(node: any) {
         if (node.fullNamespace === 'MMK.SmartSystem.WebCommon.DeviceModel.ReadPmcResultItemModel' && Array.isArray(node.value) && node.value.length > 0) {
@@ -78,6 +74,22 @@ export class HomeAlarm implements IZrenderNode {
                     this.downNode.updateRedState(false);
                 }
             }
+        }
+        if (node.fullNamespace == 'MMK.SmartSystem.WebCommon.DeviceModel.ReadPositionResultItemModel' && Array.isArray(node.value)) {
+            node.value.forEach(item => {
+
+                if (item.id == 'positonXLoad') {
+                    this.upNode.updateProgress(this.getRandom(item.value));
+
+                }
+                if (item.id == 'positonYLoad') {
+                    this.middleNode.updateProgress(this.getRandom(item.value));
+
+                } if (item.id == 'positonZLoad') {
+                    this.downNode.updateProgress(this.getRandom(item.value));
+
+                }
+            });
         }
     }
 }

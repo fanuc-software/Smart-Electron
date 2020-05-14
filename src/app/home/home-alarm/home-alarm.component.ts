@@ -21,7 +21,6 @@ export class HomeAlarmComponent implements OnInit, OnDestroy {
 
     this.initStyle();
     this.GetHubErrorMata = (node: ErrorMataModel[]) => {
-      console.log(node);
       node.forEach(d => {
         d.alarmModel = new CNCAlarmModel();
         const dd = AlarmHandlerEnum[d.handler.replace("Handler", "")];
@@ -30,7 +29,8 @@ export class HomeAlarmComponent implements OnInit, OnDestroy {
           d.alarmModel.style = this.mapStyle.get(dd);
 
         }
-        if (this.nodes.length < 12) {
+        const find = this.nodes.findIndex(f => f.handler == d.handler && f.message == d.message);
+        if (this.nodes.length < 12 && find == -1) {
           this.nodes.push(d);
 
         }
@@ -48,6 +48,10 @@ export class HomeAlarmComponent implements OnInit, OnDestroy {
         if (this.mapStyle.has(dd)) {
           node.alarmModel.style = this.mapStyle.get(dd);
 
+        }
+        const find = this.nodes.findIndex(f => f.handler == node.handler && f.message == node.message);
+        if (find != -1) {
+          this.nodes.splice(find, 1);
         }
         if (this.nodes.length < 12) {
           this.nodes.unshift(node);
@@ -74,7 +78,7 @@ export class HomeAlarmComponent implements OnInit, OnDestroy {
       arr.forEach(d => this.nodes.splice(d, 1));
 
     }, 5000);
-
+    this.initSignalr();
   }
 
   initSignalr() {
@@ -82,7 +86,8 @@ export class HomeAlarmComponent implements OnInit, OnDestroy {
       this.cncHub = connection;
 
       connection.on('GetHubErrorMata', (message: ErrorMataModel[]) => {
-        this.GetCncErrorEvent(message);
+        this.GetHubErrorMata(message);
+
       });
       connection.on('GetError', (message: ErrorMataModel) => {
         this.GetCncErrorEvent(message);

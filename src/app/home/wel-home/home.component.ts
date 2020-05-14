@@ -14,7 +14,7 @@ import { HttpClient } from '@angular/common/http';
 export class HomeComponent extends BaseAssetsNode implements OnInit, OnDestroy {
 
   mainZrender: MainZrenderFactory;
-  imagePath = ['gray', 'green', 'yellow', 'red'];
+  imagePath = ['gray', 'green', 'yellow', 'red','red','red','red','red','red','red','red','red'];
   index = 0;
   loadPath = '';
   cncDataEvent;

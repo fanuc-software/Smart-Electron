@@ -45,7 +45,7 @@ export class HomeSpeed extends BaseAssetsNode implements IZrenderNode {
                 height: 211,
                 x: 573.5,
                 y: 230,
-                text: '0000',
+                text: '00000',
                 fontSize: 70,
                 fontFamily: 'DINCondensed-Bold',
                 textFill: '#474646',
@@ -120,7 +120,7 @@ export class HomeSpeed extends BaseAssetsNode implements IZrenderNode {
 
         if (node.fullNamespace == 'MMK.SmartSystem.WebCommon.DeviceModel.ReadFeedrateResultModel' && Array.isArray(node.value) && node.value.length > 0) {
             const newValue = node.value[0].value;
-            const update = (Array(4).join('0') + newValue).slice(-4);
+            const update = (Array(5).join('0') + newValue).slice(-5);
             this.speedTopZrender.attr('style', {
                 text: update
             });
